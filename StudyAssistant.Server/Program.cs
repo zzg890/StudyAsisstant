@@ -44,7 +44,7 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
 	var dbContext = scope.ServiceProvider.GetRequiredService<StudyAssistantDbContext>();
-	await dbContext.Database.EnsureCreatedAsync();
+	await DbSchemaUpdater.EnsureLatestSchemaAsync(dbContext);
 	await DbSeeder.SeedAsync(dbContext);
 }
 

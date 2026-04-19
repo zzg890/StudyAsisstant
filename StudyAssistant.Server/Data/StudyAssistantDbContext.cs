@@ -9,6 +9,8 @@ public sealed class StudyAssistantDbContext(DbContextOptions<StudyAssistantDbCon
 
     public DbSet<AiModelConfig> AiModelConfigs => Set<AiModelConfig>();
 
+    public DbSet<HomeworkSubmission> HomeworkSubmissions => Set<HomeworkSubmission>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<User>()
@@ -17,6 +19,10 @@ public sealed class StudyAssistantDbContext(DbContextOptions<StudyAssistantDbCon
 
         modelBuilder.Entity<AiModelConfig>()
             .HasIndex(c => new { c.Provider, c.ModelName, c.Scenario, c.Priority });
+
+        modelBuilder.Entity<HomeworkSubmission>()
+            .HasIndex(s => s.TaskId)
+            .IsUnique();
 
         base.OnModelCreating(modelBuilder);
     }
