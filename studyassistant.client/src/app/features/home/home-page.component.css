@@ -1,0 +1,246 @@
+.home-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.welcome-block {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  padding: 1.25rem;
+}
+
+.welcome-block h2 {
+  margin: 0;
+  font-size: 1.55rem;
+  color: #0f172a;
+}
+
+.welcome-block > p {
+  margin: 0.45rem 0 0;
+  color: #64748b;
+}
+
+.login-tip {
+  margin-top: 0.9rem;
+  padding: 0.8rem;
+  border-radius: 0.75rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+
+.login-tip p {
+  margin: 0.2rem 0;
+  color: #334155;
+}
+
+.primary-link {
+  display: inline-block;
+  margin-top: 0.4rem;
+  color: #4f46e5;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.profile-line {
+  margin-top: 0.9rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  align-items: center;
+}
+
+.profile-line span {
+  background: #eef2ff;
+  color: #4338ca;
+  border-radius: 999px;
+  padding: 0.25rem 0.65rem;
+  font-size: 0.82rem;
+}
+
+.profile-line button {
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  border-radius: 0.65rem;
+  padding: 0.35rem 0.65rem;
+  cursor: pointer;
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.stat-card {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  padding: 1rem;
+}
+
+.stat-card-head span {
+  display: inline-block;
+  font-size: 0.75rem;
+  border-radius: 999px;
+  padding: 0.2rem 0.5rem;
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.stat-card h3 {
+  margin: 0.55rem 0 0;
+  font-size: 1.6rem;
+  color: #0f172a;
+}
+
+.stat-card p {
+  margin: 0.3rem 0 0;
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.tone-green .stat-card-head span { background: #dcfce7; color: #15803d; }
+.tone-blue .stat-card-head span { background: #dbeafe; color: #1d4ed8; }
+.tone-purple .stat-card-head span { background: #ede9fe; color: #6d28d9; }
+.tone-orange .stat-card-head span { background: #ffedd5; color: #c2410c; }
+
+.action-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.action-card {
+  border-radius: 1rem;
+  padding: 1.1rem;
+  color: #fff;
+}
+
+.action-card h3 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.action-card p {
+  margin: 0.45rem 0 0.85rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.action-card a {
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 0.65rem;
+  background: #fff;
+  padding: 0.4rem 0.75rem;
+  font-weight: 600;
+}
+
+.action-camera {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+}
+
+.action-camera a {
+  color: #4338ca;
+}
+
+.action-report {
+  background: linear-gradient(135deg, #0f766e, #14b8a6);
+}
+
+.action-report a {
+  color: #0f766e;
+}
+
+.weak-block {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  padding: 1.1rem;
+}
+
+.weak-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.8rem;
+}
+
+.weak-header h3 {
+  margin: 0;
+}
+
+.weak-header a {
+  text-decoration: none;
+  color: #4f46e5;
+  font-weight: 600;
+}
+
+.weak-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.weak-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 0.85rem;
+  padding: 0.8rem;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.weak-top h4 {
+  margin: 0;
+  color: #0f172a;
+}
+
+.weak-top small {
+  color: #64748b;
+}
+
+.weak-meta {
+  margin-top: 0.45rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.4rem;
+  font-size: 0.82rem;
+}
+
+.weak-meta.tone-danger { color: #dc2626; }
+.weak-meta.tone-warning { color: #d97706; }
+.weak-meta.tone-good { color: #0f766e; }
+
+.progress-track {
+  margin-top: 0.55rem;
+  height: 0.45rem;
+  background: #f1f5f9;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #f97316, #ef4444);
+}
+
+@media (max-width: 1100px) {
+  .stat-grid,
+  .weak-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .stat-grid,
+  .weak-grid,
+  .action-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .welcome-block h2 {
+    font-size: 1.3rem;
+  }
+}

@@ -1,14 +1,44 @@
-﻿<header>
-    <h1>{{ title() }}</h1>
-    <nav>
-        <a routerLink="/">首页</a>
-        <a routerLink="/login">登录</a>
-        <a routerLink="/admin/users">用户管理</a>
-        <a routerLink="/admin/ai-models">AI模型配置</a>
-        <a routerLink="/camera">拍照分析</a>
-    </nav>
-</header>
+﻿<div class="app-shell">
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-logo">AI</div>
+            <div class="brand-text">
+                <h1>AI智学助手</h1>
+                <p>智能学习平台</p>
+            </div>
+        </div>
 
-<main>
-    <router-outlet></router-outlet>
-</main>
+        <nav class="nav-list">
+            <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-item">首页</a>
+            <a routerLink="/camera" routerLinkActive="active" class="nav-item">拍照分析</a>
+            <a routerLink="/report/preview" routerLinkActive="active" class="nav-item">学习报告</a>
+            <a routerLink="/admin/users" routerLinkActive="active" class="nav-item">用户管理</a>
+            <a routerLink="/admin/ai-models" routerLinkActive="active" class="nav-item">AI模型配置</a>
+            <a routerLink="/login" routerLinkActive="active" class="nav-item">登录</a>
+        </nav>
+
+        <div class="user-card">
+            <div class="avatar">学</div>
+            <div>
+                <strong>当前用户</strong>
+                <p>点击菜单进入功能页</p>
+            </div>
+        </div>
+    </aside>
+
+    <main class="main-shell">
+        <header class="topbar">
+            <div class="topbar-search">
+                <input type="text" placeholder="搜索知识点、题目..." />
+            </div>
+            <div class="topbar-actions">
+                <button type="button">通知</button>
+                <button type="button">设置</button>
+            </div>
+        </header>
+
+        <section class="content-area">
+            <router-outlet></router-outlet>
+        </section>
+    </main>
+</div>

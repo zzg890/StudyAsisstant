@@ -1,0 +1,76 @@
+<section class="home-page">
+  <div class="welcome-block">
+    <h2>{{ greeting() }}，{{ displayName() }}</h2>
+    <p>今天是学习的好时光，让我们继续进步吧。</p>
+
+    @if (!isAuthenticated()) {
+      <div class="login-tip">
+        <p>当前未登录，可使用默认演示账号进入：</p>
+        <p>管理员：admin / abc@123</p>
+        <p>学生：student1 / abc@123</p>
+        <a routerLink="/login" class="primary-link">前往登录</a>
+      </div>
+    }
+
+    @if (isAuthenticated() && profile()) {
+      <div class="profile-line">
+        <span>年级：{{ profile()!.grade || '未设置' }}</span>
+        <span>偏好学科：{{ profile()!.subjectPreference || '未设置' }}</span>
+        <button type="button" (click)="logout()">退出登录</button>
+      </div>
+    }
+  </div>
+
+  <div class="stat-grid">
+    @for (stat of stats; track stat.label) {
+      <article class="stat-card tone-{{ stat.tone }}">
+        <div class="stat-card-head">
+          <span>{{ stat.tag }}</span>
+        </div>
+        <h3>{{ stat.value }}</h3>
+        <p>{{ stat.label }}</p>
+      </article>
+    }
+  </div>
+
+  <div class="action-grid">
+    <article class="action-card action-camera">
+      <h3>拍照分析作业</h3>
+      <p>上传作业图片，AI 自动诊断薄弱点。</p>
+      <a routerLink="/camera">立即上传</a>
+    </article>
+
+    <article class="action-card action-report">
+      <h3>查看学习报告</h3>
+      <p>查看最近一次分析结果与建议练习入口。</p>
+      <a routerLink="/report/preview">查看报告</a>
+    </article>
+  </div>
+
+  <section class="weak-block">
+    <div class="weak-header">
+      <h3>薄弱知识点</h3>
+      <a routerLink="/report/preview">查看全部</a>
+    </div>
+
+    <div class="weak-grid">
+      @for (point of weakPoints; track point.id) {
+        <article class="weak-card" routerLink="/report/preview">
+          <div class="weak-top">
+            <h4>{{ point.title }}</h4>
+            <small>{{ point.grade }}</small>
+          </div>
+
+          <div class="weak-meta tone-{{ accuracyTone(point.accuracy) }}">
+            <span>正确率 {{ point.accuracy }}%</span>
+            <span>{{ point.wrongCount }} 道错题</span>
+          </div>
+
+          <div class="progress-track">
+            <div class="progress-fill" [style.width.%]="point.accuracy"></div>
+          </div>
+        </article>
+      }
+    </div>
+  </section>
+</section>

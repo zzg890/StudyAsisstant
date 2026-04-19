@@ -1,5 +1,27 @@
 <h2>拍照分析</h2>
 <form (ngSubmit)="upload()">
+  <label>
+    学科
+    <select [value]="subject" (change)="onSubjectChange($event)" name="subject">
+      <option value="数学">数学</option>
+      <option value="英语">英语</option>
+      <option value="物理">物理</option>
+      <option value="化学">化学</option>
+    </select>
+  </label>
+
+  <label>
+    年级
+    <select [value]="grade" (change)="onGradeChange($event)" name="grade">
+      <option value="初一">初一</option>
+      <option value="初二">初二</option>
+      <option value="初三">初三</option>
+      <option value="高一">高一</option>
+      <option value="高二">高二</option>
+      <option value="高三">高三</option>
+    </select>
+  </label>
+
   <input type="file" (change)="onFileChange($event)" accept="image/*,.pdf" />
   <button type="submit" [disabled]="uploading || !selectedFile">上传</button>
 </form>

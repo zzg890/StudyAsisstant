@@ -1,3 +1,70 @@
-<h2>分析结果</h2>
-<p>任务ID：{{ taskId }}</p>
-<p>（后续可在此展示分析结果详情）</p>
+<section class="report-page">
+	<header class="report-header">
+		<h2>作业诊断报告</h2>
+		<p>任务 ID：{{ taskId }}</p>
+	</header>
+
+	@if (loading()) {
+		<div class="state-box">报告生成中，请稍候...</div>
+	}
+
+	@if (!loading() && loadError()) {
+		<div class="state-box error">{{ loadError() }}</div>
+	}
+
+	@if (!loading() && result()) {
+		<div class="summary-card">
+			<div>
+				<h3>{{ result()!.subject }} · {{ result()!.grade }}</h3>
+				<p>{{ result()!.summary }}</p>
+			</div>
+			<div class="score-block">
+				<strong>{{ percent(result()!.correctRate) }}%</strong>
+				<span>综合正确率</span>
+			</div>
+		</div>
+
+		<div class="metrics-grid">
+			<article>
+				<h4>{{ result()!.recognizedQuestionCount }}</h4>
+				<p>识别题目数</p>
+			</article>
+			<article>
+				<h4>{{ result()!.weakKnowledgePoints.length }}</h4>
+				<p>薄弱知识点</p>
+			</article>
+			<article>
+				<h4>{{ result()!.status }}</h4>
+				<p>任务状态</p>
+			</article>
+		</div>
+
+		<section class="weak-section">
+			<h3>薄弱点分析</h3>
+			<div class="weak-list">
+				@for (item of result()!.weakKnowledgePoints; track item.name) {
+					<article class="weak-item">
+						<div class="weak-title">
+							<strong>{{ item.name }}</strong>
+							<span>正确率 {{ percent(item.accuracyRate) }}%</span>
+						</div>
+						<div class="bar-track">
+							<div class="bar-fill" [style.width.%]="percent(item.accuracyRate)"></div>
+						</div>
+						<p>错题数：{{ item.wrongQuestionCount }}</p>
+						<p class="suggestion">建议：{{ item.suggestion }}</p>
+					</article>
+				}
+			</div>
+		</section>
+
+		<section class="actions-section">
+			<h3>建议行动</h3>
+			<ul>
+				@for (action of result()!.recommendedActions; track action) {
+					<li>{{ action }}</li>
+				}
+			</ul>
+		</section>
+	}
+</section>

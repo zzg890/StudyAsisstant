@@ -17,37 +17,43 @@ interface ProfileResponse {
   selector: 'app-home-page',
   standalone: true,
   imports: [RouterLink],
-  template: `
-    <section>
-      <h2>StudyAssistant Dashboard</h2>
-      <p>已启用用户登录、用户管理、AI 模型配置的基础骨架。</p>
-
-      @if (!isAuthenticated()) {
-        <p>当前未登录。可使用默认演示账号登录。</p>
-        <p>管理员：admin / abc@123</p>
-        <p>学生：student1 / abc@123</p>
-        <a routerLink="/login">前往登录</a>
-      }
-
-      @if (isAuthenticated()) {
-        <p>当前用户：{{ displayName() }}</p>
-        @if (profile()) {
-          <p>年级：{{ profile()!.grade || '未设置' }}，偏好学科：{{ profile()!.subjectPreference || '未设置' }}</p>
-        }
-        <button type="button" (click)="logout()">退出登录</button>
-      }
-    </section>
-  `
+  templateUrl: './home-page.component.html',
+  styleUrl: './home-page.component.css'
 })
 export class HomePageComponent implements OnInit {
+  readonly stats = [
+    { label: '本周正确率', value: '87%', tag: '+12%', tone: 'green' },
+    { label: '已完成题目', value: '156', tag: '本周', tone: 'blue' },
+    { label: '学习时长', value: '2.5h', tag: '今日', tone: 'purple' },
+    { label: '学习连续', value: '7天', tag: '连续', tone: 'orange' }
+  ];
+
+  readonly weakPoints = [
+    { id: 'func', title: '一次函数', grade: '初二 · 数学', accuracy: 45, wrongCount: 12 },
+    { id: 'triangle', title: '全等三角形', grade: '初二 · 数学', accuracy: 58, wrongCount: 8 },
+    { id: 'fraction', title: '分式方程', grade: '初二 · 数学', accuracy: 63, wrongCount: 6 }
+  ];
+
   readonly profile = signal<ProfileResponse | null>(null);
   readonly isAuthenticated = computed(() => this.authService.isAuthenticated());
   readonly displayName = computed(() => this.authService.session()?.displayName ?? '未登录');
+  readonly greeting = computed(() => {
+    const hour = new Date().getHours();
+    if (hour < 12) {
+      return '早上好';
+    }
+
+    if (hour < 18) {
+      return '下午好';
+    }
+
+    return '晚上好';
+  });
 
   constructor(
     private readonly authService: AuthService,
     private readonly http: HttpClient,
-    private readonly router: Router) {}
+    private readonly router: Router) { }
 
   async ngOnInit(): Promise<void> {
     if (!this.authService.isAuthenticated()) {
@@ -67,5 +73,17 @@ export class HomePageComponent implements OnInit {
     this.authService.logout();
     this.profile.set(null);
     void this.router.navigateByUrl('/login');
+  }
+
+  accuracyTone(accuracy: number): 'danger' | 'warning' | 'good' {
+    if (accuracy < 50) {
+      return 'danger';
+    }
+
+    if (accuracy < 70) {
+      return 'warning';
+    }
+
+    return 'good';
   }
 }

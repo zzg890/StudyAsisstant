@@ -12,6 +12,8 @@ import { HttpClient, HttpEventType } from '@angular/common/http';
 })
 export class CameraPage {
   selectedFile: File | null = null;
+  subject = '数学';
+  grade = '初二';
   uploading = false;
   uploadSuccess = false;
   uploadError = '';
@@ -27,14 +29,26 @@ export class CameraPage {
     }
   }
 
+  onSubjectChange(event: Event) {
+    const select = event.target as HTMLSelectElement;
+    this.subject = select.value;
+  }
+
+  onGradeChange(event: Event) {
+    const select = event.target as HTMLSelectElement;
+    this.grade = select.value;
+  }
+
   upload() {
     if (!this.selectedFile) return;
     const formData = new FormData();
     formData.append('file', this.selectedFile);
+    formData.append('subject', this.subject);
+    formData.append('grade', this.grade);
     this.uploading = true;
     this.uploadSuccess = false;
     this.uploadError = '';
-    this.http.post<any>('/api/homework-analyses/upload', formData, {
+    this.http.post<any>('/api/homework-analyses/uploads', formData, {
       reportProgress: true,
       observe: 'events'
     }).subscribe({
@@ -51,7 +65,9 @@ export class CameraPage {
       },
       error: err => {
         this.uploading = false;
-        this.uploadError = err?.error?.message || '上传失败';
+        this.uploadError = typeof err?.error === 'string'
+          ? err.error
+          : (err?.error?.message || '上传失败');
       }
     });
   }

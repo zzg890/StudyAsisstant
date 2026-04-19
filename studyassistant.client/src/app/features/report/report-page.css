@@ -1,6 +1,169 @@
-h2 {
-  margin-bottom: 1rem;
+.report-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
-p {
-  margin: 0.5rem 0;
+
+.report-header h2 {
+  margin: 0;
+  font-size: 1.55rem;
+}
+
+.report-header p {
+  margin: 0.25rem 0 0;
+  color: #64748b;
+}
+
+.state-box {
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  border-radius: 0.85rem;
+  padding: 0.9rem;
+}
+
+.state-box.error {
+  border-color: #fecaca;
+  color: #b91c1c;
+  background: #fef2f2;
+}
+
+.summary-card {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.9rem;
+  border-radius: 1rem;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  padding: 1rem;
+}
+
+.summary-card h3 {
+  margin: 0;
+}
+
+.summary-card p {
+  margin: 0.35rem 0 0;
+  color: #475569;
+}
+
+.score-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.score-block strong {
+  font-size: 1.85rem;
+  color: #4f46e5;
+}
+
+.score-block span {
+  color: #64748b;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.metrics-grid article {
+  border: 1px solid #e2e8f0;
+  border-radius: 0.85rem;
+  background: #fff;
+  padding: 0.85rem;
+}
+
+.metrics-grid h4 {
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+.metrics-grid p {
+  margin: 0.35rem 0 0;
+  color: #64748b;
+}
+
+.weak-section,
+.actions-section {
+  border: 1px solid #e2e8f0;
+  border-radius: 0.9rem;
+  background: #fff;
+  padding: 1rem;
+}
+
+.weak-section h3,
+.actions-section h3 {
+  margin: 0 0 0.75rem;
+}
+
+.weak-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.weak-item {
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+  padding: 0.75rem;
+}
+
+.weak-title {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.weak-title span {
+  color: #b45309;
+  font-size: 0.85rem;
+}
+
+.bar-track {
+  margin-top: 0.5rem;
+  height: 0.45rem;
+  border-radius: 999px;
+  overflow: hidden;
+  background: #f1f5f9;
+}
+
+.bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #f97316, #ef4444);
+}
+
+.weak-item p {
+  margin: 0.45rem 0 0;
+  color: #475569;
+}
+
+.suggestion {
+  font-size: 0.9rem;
+}
+
+.actions-section ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  color: #334155;
+}
+
+.actions-section li {
+  margin: 0.35rem 0;
+}
+
+@media (max-width: 900px) {
+  .summary-card {
+    flex-direction: column;
+  }
+
+  .score-block {
+    align-items: flex-start;
+  }
+
+  .metrics-grid,
+  .weak-list {
+    grid-template-columns: 1fr;
+  }
 }
