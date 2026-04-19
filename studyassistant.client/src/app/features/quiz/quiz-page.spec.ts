@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { QuizPage } from './quiz-page';
+import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { FormsModule } from '@angular/forms';
 
 describe('QuizPage', () => {
   let component: QuizPage;
@@ -9,8 +9,17 @@ describe('QuizPage', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule, FormsModule],
-      declarations: [QuizPage]
+      imports: [QuizPage, RouterTestingModule],
+      providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              paramMap: convertToParamMap({ pointId: 'func' })
+            }
+          }
+        }
+      ]
     }).compileComponents();
   });
 

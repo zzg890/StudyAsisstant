@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PracticePage } from './practice-page';
+import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { FormsModule } from '@angular/forms';
 
 describe('PracticePage', () => {
   let component: PracticePage;
@@ -9,8 +9,17 @@ describe('PracticePage', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule, FormsModule],
-      declarations: [PracticePage]
+      imports: [PracticePage, RouterTestingModule],
+      providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              queryParamMap: convertToParamMap({})
+            }
+          }
+        }
+      ]
     }).compileComponents();
   });
 

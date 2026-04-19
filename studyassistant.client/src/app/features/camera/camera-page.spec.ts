@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CameraPage } from './camera-page';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('CameraPage', () => {
   let component: CameraPage;
@@ -8,8 +9,7 @@ describe('CameraPage', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      declarations: [CameraPage]
+      imports: [CameraPage, HttpClientTestingModule, RouterTestingModule]
     }).compileComponents();
   });
 

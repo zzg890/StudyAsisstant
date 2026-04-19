@@ -25,4 +25,4 @@ describe('App', () => {
   it('should expose app title signal', () => {
     expect(component.title()).toBe('StudyAssistant');
   });
-};
+});

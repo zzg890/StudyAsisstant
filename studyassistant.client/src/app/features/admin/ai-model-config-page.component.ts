@@ -8,6 +8,8 @@ interface AiModelItem {
   name: string;
   provider: string;
   modelName: string;
+  baseUrl: string;
+  apiKey: string;
   scenario: string;
   temperature: number;
   maxTokens: number;
@@ -15,32 +17,17 @@ interface AiModelItem {
   isActive: boolean;
 }
 
+import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-ai-model-config-page',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CommonModule],
   styleUrls: ['./ai-model-config-page.component.css'],
   template: `
     <section class="ai-model-config-page">
       <h2>AI模型配置</h2>
       <button type="button" (click)="loadConfigs()">刷新配置</button>
-
-      <form [formGroup]="form" (ngSubmit)="createConfig()">
-        <h3>新增配置</h3>
-        <label>名称<input type="text" formControlName="name" /></label>
-        <label>Provider<input type="text" formControlName="provider" /></label>
-        <label>Model Name<input type="text" formControlName="modelName" /></label>
-        <label>BaseUrl<input type="text" formControlName="baseUrl" /></label>
-        <label>ApiKey<input type="text" formControlName="apiKey" /></label>
-        <label>场景<input type="text" formControlName="scenario" /></label>
-        <label>Temperature<input type="number" formControlName="temperature" step="0.01" /></label>
-        <label>Max Tokens<input type="number" formControlName="maxTokens" /></label>
-        <label>优先级<input type="number" formControlName="priority" /></label>
-        <label>启用
-          <input type="checkbox" formControlName="isActive" />
-        </label>
-        <button type="submit">保存</button>
-      </form>
+      <button type="button" class="action-btn" (click)="openModal()">新增配置</button>
 
       <div *ngIf="message()" style="margin:0.7rem 0;color:#b91c1c;">{{ message() }}</div>
 
@@ -73,6 +60,30 @@ interface AiModelItem {
           </tr>
         </tbody>
       </table>
+
+      <div class="modal-mask" *ngIf="showModal">
+        <div class="modal-box">
+          <form [formGroup]="form" (ngSubmit)="createConfig()">
+            <h3>{{ editingId ? '编辑配置' : '新增配置' }}</h3>
+            <label>名称<input type="text" formControlName="name" /></label>
+            <label>Provider<input type="text" formControlName="provider" /></label>
+            <label>Model Name<input type="text" formControlName="modelName" /></label>
+            <label>BaseUrl<input type="text" formControlName="baseUrl" /></label>
+            <label>ApiKey<input type="text" formControlName="apiKey" /></label>
+            <label>场景<input type="text" formControlName="scenario" /></label>
+            <label>Temperature<input type="number" formControlName="temperature" step="0.01" /></label>
+            <label>Max Tokens<input type="number" formControlName="maxTokens" /></label>
+            <label>优先级<input type="number" formControlName="priority" /></label>
+            <label>启用
+              <input type="checkbox" formControlName="isActive" />
+            </label>
+            <div class="modal-actions">
+              <button type="submit">保存</button>
+              <button type="button" (click)="closeModal()">取消</button>
+            </div>
+          </form>
+        </div>
+      </div>
     </section>
   `
 })
@@ -80,7 +91,8 @@ export class AiModelConfigPageComponent implements OnInit {
   readonly configs = signal<AiModelItem[]>([]);
   readonly message = signal('');
   readonly form;
-  private editingId: number|null = null;
+  showModal = false;
+  public editingId: number|null = null;
 
   constructor(private readonly http: HttpClient, private readonly fb: FormBuilder) {
     this.form = this.fb.nonNullable.group({
@@ -130,9 +142,22 @@ export class AiModelConfigPageComponent implements OnInit {
         name: '', provider: '', modelName: '', baseUrl: '', apiKey: '', scenario: 'general', temperature: 0.2, maxTokens: 1024, priority: 0, isActive: true
       });
       await this.loadConfigs();
+      this.closeModal();
     } catch {
       this.message.set('保存模型配置失败。');
     }
+  }
+
+  openModal() {
+    this.editingId = null;
+    this.form.reset({
+      name: '', provider: '', modelName: '', baseUrl: '', apiKey: '', scenario: 'general', temperature: 0.2, maxTokens: 1024, priority: 0, isActive: true
+    });
+    this.showModal = true;
+  }
+
+  closeModal() {
+    this.showModal = false;
   }
 
   editConfig(item: any) {
@@ -149,6 +174,7 @@ export class AiModelConfigPageComponent implements OnInit {
       priority: item.priority,
       isActive: item.isActive
     });
+    this.showModal = true;
   }
 
   async toggleActive(item: any) {
