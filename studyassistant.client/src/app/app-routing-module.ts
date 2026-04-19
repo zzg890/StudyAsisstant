@@ -16,6 +16,14 @@ const routes: Routes = [
     loadComponent: () => import('./features/report/report-page').then(m => m.ReportPage)
   },
   {
+    path: 'practice',
+    loadComponent: () => import('./features/practice/practice-page').then(m => m.PracticePage)
+  },
+  {
+    path: 'quiz/:pointId',
+    loadComponent: () => import('./features/quiz/quiz-page').then(m => m.QuizPage)
+  },
+  {
     path: 'login',
     loadComponent: () => import('./features/auth/login-page.component').then((m) => m.LoginPageComponent)
   },
@@ -32,7 +40,7 @@ const routes: Routes = [
   {
     path: 'profile',
     canActivate: [authGuard],
-    loadComponent: () => import('./features/home/home-page.component').then((m) => m.HomePageComponent)
+    loadComponent: () => import('./features/profile/profile-page').then((m) => m.ProfilePage)
   },
   {
     path: '**',

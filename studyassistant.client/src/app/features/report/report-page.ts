@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 
 interface WeakKnowledgePointItem {
@@ -26,6 +27,7 @@ interface HomeworkAnalysisResultResponse {
 @Component({
   selector: 'app-report-page',
   standalone: true,
+  imports: [RouterLink],
   templateUrl: './report-page.html',
   styleUrls: ['./report-page.css']
 })

@@ -53,6 +53,13 @@
 						</div>
 						<p>错题数：{{ item.wrongQuestionCount }}</p>
 						<p class="suggestion">建议：{{ item.suggestion }}</p>
+						<a
+							class="practice-link"
+							routerLink="/practice"
+							[queryParams]="{ point: item.name, subject: result()!.subject, grade: result()!.grade }"
+						>
+							进入专项练习
+						</a>
 					</article>
 				}
 			</div>

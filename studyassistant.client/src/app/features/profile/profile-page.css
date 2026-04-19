@@ -1,0 +1,73 @@
+.profile-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+header h2 {
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+header p {
+  margin: 0.3rem 0 0;
+  color: #64748b;
+}
+
+.state-box {
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  border-radius: 0.85rem;
+  padding: 0.9rem;
+}
+
+.state-box.error {
+  border-color: #fecaca;
+  color: #b91c1c;
+  background: #fef2f2;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  max-width: 400px;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.98rem;
+}
+
+input[type="text"],
+select {
+  border: 1px solid #cbd5e1;
+  border-radius: 0.65rem;
+  padding: 0.45rem 0.6rem;
+}
+
+.form-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+}
+
+button[type="submit"] {
+  border: 1px solid #2563eb;
+  background: #2563eb;
+  color: #fff;
+  border-radius: 0.65rem;
+  padding: 0.45rem 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.success-tip {
+  color: #16a34a;
+}
+
+.error-tip {
+  color: #b91c1c;
+}

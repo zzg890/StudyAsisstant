@@ -1,0 +1,39 @@
+<section class="practice-page">
+  <header>
+    <h2>练习中心</h2>
+    <p>选择学科、年级和知识点，进入专项练习。</p>
+  </header>
+
+  <div class="filter-row">
+    <label>
+      学科
+      <select [(ngModel)]="subject" name="subject">
+        <option value="数学">数学</option>
+        <option value="英语">英语</option>
+      </select>
+    </label>
+    <label>
+      年级
+      <select [(ngModel)]="grade" name="grade">
+        <option value="初一">初一</option>
+        <option value="初二">初二</option>
+        <option value="初三">初三</option>
+      </select>
+    </label>
+  </div>
+
+  <div class="kp-list">
+    @for (kp of filteredPoints; track kp.id) {
+      <article class="kp-card">
+        <div>
+          <strong>{{ kp.name }}</strong>
+          <span>{{ kp.subject }} · {{ kp.grade }}</span>
+        </div>
+        <button type="button" (click)="startPractice(kp)">开始练习</button>
+      </article>
+    }
+    @if (filteredPoints.length === 0) {
+      <div class="empty-tip">暂无可选知识点</div>
+    }
+  </div>
+</section>

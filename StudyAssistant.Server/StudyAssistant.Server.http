@@ -7,6 +7,39 @@ Accept: application/json
 
 ###
 
+# 用户注册
+POST {{StudyAssistant.Server_HostAddress}}/api/users
+Content-Type: application/json
+
+{
+	"userName": "testuser",
+	"password": "abc@123",
+	"displayName": "测试用户"
+}
+
+###
+
+# 获取AI模型配置
+GET {{StudyAssistant.Server_HostAddress}}/api/ai-model-configs
+Authorization: Bearer {{token}}
+Accept: application/json
+
+###
+
+# 新增AI模型配置
+POST {{StudyAssistant.Server_HostAddress}}/api/ai-model-configs
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+	"modelName": "gpt-4",
+	"apiKey": "sk-xxxx",
+	"endpoint": "https://api.openai.com/v1/",
+	"isEnabled": true
+}
+
+###
+
 POST {{StudyAssistant.Server_HostAddress}}/api/auth/login
 Content-Type: application/json
 

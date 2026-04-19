@@ -1,0 +1,43 @@
+<section class="profile-page">
+  <header>
+    <h2>个人资料</h2>
+    <p>可编辑昵称、年级、学科偏好</p>
+  </header>
+
+  @if (loading()) {
+    <div class="state-box">资料加载中...</div>
+  }
+  @if (loadError()) {
+    <div class="state-box error">{{ loadError() }}</div>
+  }
+
+  @if (!loading() && !loadError()) {
+    <form (ngSubmit)="save()" autocomplete="off">
+      <label>
+        昵称
+        <input type="text" [(ngModel)]="profile().displayName" name="displayName" maxlength="64" required />
+      </label>
+      <label>
+        年级
+        <select [(ngModel)]="profile().grade" name="grade" required>
+          <option *ngFor="let g of grades" [value]="g">{{ g }}</option>
+        </select>
+      </label>
+      <label>
+        学科偏好
+        <select [(ngModel)]="profile().subjectPreference" name="subjectPreference" required>
+          <option *ngFor="let s of subjects" [value]="s">{{ s }}</option>
+        </select>
+      </label>
+      <div class="form-actions">
+        <button type="submit" [disabled]="saving()">保存</button>
+        @if (saveSuccess()) {
+          <span class="success-tip">保存成功</span>
+        }
+        @if (saveError()) {
+          <span class="error-tip">{{ saveError() }}</span>
+        }
+      </div>
+    </form>
+  }
+</section>

@@ -1,0 +1,61 @@
+<section class="quiz-page">
+  @if (quiz()) {
+    <header class="quiz-header">
+      <div>
+        <h2>{{ quiz()!.pointName }} 专项练习</h2>
+        <p>{{ quiz()!.subject }} · {{ quiz()!.grade }}</p>
+      </div>
+      <button type="button" class="ghost" (click)="backToPractice()">返回练习中心</button>
+    </header>
+
+    <div class="question-list">
+      @for (question of quiz()!.questions; track question.id; let i = $index) {
+        <article class="question-card">
+          <h3>第 {{ i + 1 }} 题</h3>
+          <p>{{ question.stem }}</p>
+
+          <div class="options">
+            @for (option of question.options; track option; let optionIndex = $index) {
+              <label class="option-item">
+                <input
+                  type="radio"
+                  [name]="question.id"
+                  [value]="optionIndex"
+                  [checked]="selectedAnswers()[question.id] === optionIndex"
+                  [disabled]="submitted()"
+                  (change)="updateAnswer(question.id, $any($event.target).value)"
+                />
+                <span>{{ option }}</span>
+              </label>
+            }
+          </div>
+
+          @if (submitted()) {
+            <div class="analysis" [class.correct]="selectedAnswers()[question.id] === question.answerIndex" [class.wrong]="selectedAnswers()[question.id] !== question.answerIndex">
+              <strong>
+                @if (selectedAnswers()[question.id] === question.answerIndex) {
+                  回答正确
+                } @else {
+                  回答错误，正确答案：{{ question.options[question.answerIndex] }}
+                }
+              </strong>
+              <p>{{ question.analysis }}</p>
+            </div>
+          }
+        </article>
+      }
+    </div>
+
+    <footer class="action-bar">
+      @if (!submitted()) {
+        <button type="button" class="primary" (click)="submitQuiz()">提交并判分</button>
+      } @else {
+        <div class="result-box">
+          <strong>得分：{{ score() }} 分</strong>
+          <span>答对 {{ correctCount() }} / {{ quiz()!.questions.length }} 题</span>
+        </div>
+        <button type="button" class="ghost" (click)="retry()">重新作答</button>
+      }
+    </footer>
+  }
+</section>
