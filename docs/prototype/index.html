@@ -1,0 +1,2154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI智学助手 - 智能学习平台</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6366f1',
+                        secondary: '#8b5cf6',
+                        accent: '#f59e0b',
+                        surface: '#f8fafc',
+                        dark: '#0f172a'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif; }
+        .sidebar-item:hover { background: rgba(99, 102, 241, 0.1); }
+        .sidebar-item.active { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; }
+        .card-hover:hover { transform: translateY(-2px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        .gradient-text { background: linear-gradient(135deg, #6366f1, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .glass { background: rgba(255,255,255,0.8); backdrop-filter: blur(20px); }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="flex h-screen">
+        <!-- 侧边栏 -->
+        <aside class="w-64 bg-white border-r border-gray-200 flex flex-col">
+            <!-- Logo -->
+            <div class="p-6 border-b border-gray-100">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center">
+                        <i class="fas fa-brain text-white text-lg"></i>
+                    </div>
+                    <div>
+                        <h1 class="font-bold text-dark">AI智学助手</h1>
+                        <p class="text-xs text-gray-400">智能学习平台</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 导航菜单 -->
+            <nav class="flex-1 p-4">
+                <ul class="space-y-2">
+                    <li>
+                        <a href="#" onclick="showPage('home')" class="sidebar-item active flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 transition-all">
+                            <i class="fas fa-home w-5"></i>
+                            <span>首页</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="showPage('camera')" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 transition-all">
+                            <i class="fas fa-camera w-5"></i>
+                            <span>拍照分析</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="showPage('practice')" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 transition-all">
+                            <i class="fas fa-pencil-alt w-5"></i>
+                            <span>练习中心</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="showPage('notes')" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 transition-all">
+                            <i class="fas fa-book w-5"></i>
+                            <span>我的笔记</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="showPage('report')" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 transition-all">
+                            <i class="fas fa-chart-bar w-5"></i>
+                            <span>学习报告</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="showPage('grade-history')" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 transition-all">
+                            <i class="fas fa-history w-5"></i>
+                            <span>批阅历史</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <!-- 用户信息 -->
+            <div class="p-4 border-t border-gray-100">
+                <a href="#" onclick="showPage('profile')" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-50 transition-all">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face" alt="头像" class="w-10 h-10 rounded-full object-cover">
+                    <div class="flex-1 min-w-0">
+                        <p class="font-medium text-dark truncate">张小明</p>
+                        <p class="text-xs text-gray-400">初二 · 数学</p>
+                    </div>
+                </a>
+            </div>
+        </aside>
+        
+        <!-- 主内容区 -->
+        <main class="flex-1 flex flex-col overflow-hidden">
+            <!-- 顶部栏 -->
+            <header class="bg-white border-b border-gray-200 px-8 py-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <div class="relative">
+                            <input type="text" placeholder="搜索知识点、题目..." class="w-80 pl-10 pr-4 py-2.5 bg-gray-100 rounded-xl border-0 focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all">
+                            <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <button class="relative p-2 rounded-xl hover:bg-gray-100 transition-all">
+                            <i class="fas fa-bell text-gray-600"></i>
+                            <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                        </button>
+                        <button class="relative p-2 rounded-xl hover:bg-gray-100 transition-all">
+                            <i class="fas fa-cog text-gray-600"></i>
+                        </button>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- 内容区域 -->
+            <div id="content" class="flex-1 overflow-auto p-8">
+                <!-- 首页内容 -->
+                <div id="page-home" class="page-content">
+                    <!-- 欢迎区域 -->
+                    <div class="mb-8">
+                        <h2 class="text-2xl font-bold text-dark mb-2">下午好，张小明 👋</h2>
+                        <p class="text-gray-500">今天是学习的好时光，让我们继续进步吧！</p>
+                    </div>
+                    
+                    <!-- 统计数据 -->
+                    <div class="grid grid-cols-4 gap-6 mb-8">
+                        <div class="bg-white rounded-2xl p-6 card-hover transition-all border border-gray-100">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
+                                    <i class="fas fa-check-circle text-green-600 text-xl"></i>
+                                </div>
+                                <span class="text-sm text-green-600 font-medium">+12%</span>
+                            </div>
+                            <h3 class="text-3xl font-bold text-dark">87%</h3>
+                            <p class="text-gray-500 text-sm mt-1">本周正确率</p>
+                        </div>
+                        <div class="bg-white rounded-2xl p-6 card-hover transition-all border border-gray-100">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+                                    <i class="fas fa-pencil-alt text-blue-600 text-xl"></i>
+                                </div>
+                                <span class="text-sm text-blue-600 font-medium">本周</span>
+                            </div>
+                            <h3 class="text-3xl font-bold text-dark">156</h3>
+                            <p class="text-gray-500 text-sm mt-1">已完成题目</p>
+                        </div>
+                        <div class="bg-white rounded-2xl p-6 card-hover transition-all border border-gray-100">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
+                                    <i class="fas fa-clock text-purple-600 text-xl"></i>
+                                </div>
+                                <span class="text-sm text-purple-600 font-medium">今日</span>
+                            </div>
+                            <h3 class="text-3xl font-bold text-dark">2.5h</h3>
+                            <p class="text-gray-500 text-sm mt-1">学习时长</p>
+                        </div>
+                        <div class="bg-white rounded-2xl p-6 card-hover transition-all border border-gray-100">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center">
+                                    <i class="fas fa-fire text-orange-600 text-xl"></i>
+                                </div>
+                                <span class="text-sm text-orange-600 font-medium">连续</span>
+                            </div>
+                            <h3 class="text-3xl font-bold text-dark">7天</h3>
+                            <p class="text-gray-500 text-sm mt-1">学习连续</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 快捷操作 -->
+                    <div class="grid grid-cols-2 gap-6 mb-8">
+                        <div class="bg-gradient-to-br from-primary to-secondary rounded-2xl p-6 text-white">
+                            <div class="flex items-start justify-between">
+                                <div>
+                                    <h3 class="text-xl font-bold mb-2">拍照分析作业</h3>
+                                    <p class="text-white/80 text-sm mb-4">上传作业图片，AI自动诊断薄弱点</p>
+                                    <button onclick="showPage('camera')" class="bg-white text-primary px-4 py-2 rounded-xl font-medium hover:bg-white/90 transition-all">
+                                        立即上传 <i class="fas fa-arrow-right ml-2"></i>
+                                    </button>
+                                </div>
+                                <div class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center">
+                                    <i class="fas fa-camera text-3xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl p-6 text-white">
+                            <div class="flex items-start justify-between">
+                                <div>
+                                    <h3 class="text-xl font-bold mb-2">AI生成笔记</h3>
+                                    <p class="text-white/80 text-sm mb-4">智能生成个性化复习笔记</p>
+<button onclick="showPage('note-generate')" class="bg-white text-emerald-600 px-4 py-2 rounded-xl font-medium hover:bg-white/90 transition-all">
+                                        开始生成 <i class="fas fa-arrow-right ml-2"></i>
+                                    </button>
+                                </div>
+                                <div class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center">
+                                    <i class="fas fa-magic text-3xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 薄弱点专项 -->
+                    <div class="bg-white rounded-2xl border border-gray-100 p-6 mb-8">
+                        <div class="flex items-center justify-between mb-6">
+                            <div>
+                                <h3 class="text-lg font-bold text-dark">薄弱知识点</h3>
+                                <p class="text-gray-500 text-sm">系统根据你的作业分析出的需要加强的知识点</p>
+                            </div>
+                            <button onclick="showPage('practice')" class="text-primary hover:text-primary/80 text-sm font-medium">
+                                查看全部 <i class="fas fa-chevron-right ml-1"></i>
+                            </button>
+                        </div>
+                        <div class="grid grid-cols-3 gap-4">
+                            <div class="border border-gray-200 rounded-xl p-4 hover:border-primary/50 hover:bg-primary/5 transition-all cursor-pointer" onclick="showPage('quiz')">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                                        <span class="text-red-600 font-bold">函</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-medium text-dark">一次函数</h4>
+                                        <p class="text-xs text-gray-400">初二 · 数学</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between text-sm">
+                                    <span class="text-red-500">正确率 45%</span>
+                                    <span class="text-gray-400">12道错题</span>
+                                </div>
+                                <div class="mt-3 h-2 bg-gray-100 rounded-full overflow-hidden">
+                                    <div class="h-full bg-red-500 rounded-full" style="width: 45%"></div>
+                                </div>
+                            </div>
+                            <div class="border border-gray-200 rounded-xl p-4 hover:border-primary/50 hover:bg-primary/5 transition-all cursor-pointer" onclick="showPage('quiz')">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div class="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
+                                        <span class="text-orange-600 font-bold">几</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-medium text-dark">全等三角形</h4>
+                                        <p class="text-xs text-gray-400">初二 · 数学</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between text-sm">
+                                    <span class="text-orange-500">正确率 58%</span>
+                                    <span class="text-gray-400">8道错题</span>
+                                </div>
+                                <div class="mt-3 h-2 bg-gray-100 rounded-full overflow-hidden">
+                                    <div class="h-full bg-orange-500 rounded-full" style="width: 58%"></div>
+                                </div>
+                            </div>
+                            <div class="border border-gray-200 rounded-xl p-4 hover:border-primary/50 hover:bg-primary/5 transition-all cursor-pointer" onclick="showPage('quiz')">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div class="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
+                                        <span class="text-yellow-600 font-bold">因</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-medium text-dark">因式分解</h4>
+                                        <p class="text-xs text-gray-400">初二 · 数学</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between text-sm">
+                                    <span class="text-yellow-600">正确率 62%</span>
+                                    <span class="text-gray-400">6道错题</span>
+                                </div>
+                                <div class="mt-3 h-2 bg-gray-100 rounded-full overflow-hidden">
+                                    <div class="h-full bg-yellow-500 rounded-full" style="width: 62%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 最近学习 -->
+                    <div class="bg-white rounded-2xl border border-gray-100 p-6">
+                        <h3 class="text-lg font-bold text-dark mb-6">最近学习</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center gap-4 p-4 rounded-xl hover:bg-gray-50 transition-all cursor-pointer" onclick="showPage('note-detail')">
+                                <div class="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center">
+                                    <i class="fas fa-book text-indigo-600"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <h4 class="font-medium text-dark">一元二次方程笔记</h4>
+                                    <p class="text-sm text-gray-400">包含求根公式、配方法、例题解析</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-sm text-gray-500">今天 14:30</p>
+                                    <p class="text-xs text-gray-400">已复习 3 次</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4 p-4 rounded-xl hover:bg-gray-50 transition-all cursor-pointer" onclick="showPage('report')">
+                                <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center">
+                                    <i class="fas fa-chart-pie text-emerald-600"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <h4 class="font-medium text-dark">本周学习报告</h4>
+                                    <p class="text-sm text-gray-400">共完成156道题，正确率提升12%</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-sm text-gray-500">昨天 18:00</p>
+                                    <p class="text-xs text-primary">查看详情</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4 p-4 rounded-xl hover:bg-gray-50 transition-all cursor-pointer" onclick="showPage('quiz')">
+                                <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
+                                    <i class="fas fa-pencil-alt text-purple-600"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <h4 class="font-medium text-dark">一次函数强化练习</h4>
+                                    <p class="text-sm text-gray-400">针对薄弱点的专项练习</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-sm text-gray-500">2天前</p>
+                                    <p class="text-xs text-gray-400">完成度 80%</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 拍照分析页 -->
+                <div id="page-camera" class="page-content hidden">
+                    <div class="max-w-4xl mx-auto">
+                        <div class="mb-8">
+                            <h2 class="text-2xl font-bold text-dark mb-2">拍照分析作业</h2>
+                            <p class="text-gray-500">上传作业图片，AI将自动识别题目并分析薄弱点</p>
+                        </div>
+                        
+                        <div class="bg-white rounded-2xl border border-gray-100 p-8">
+                            <div class="border-2 border-dashed border-gray-300 rounded-2xl p-12 text-center hover:border-primary/50 transition-all">
+                                <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                                    <i class="fas fa-cloud-upload-alt text-4xl text-gray-400"></i>
+                                </div>
+                                <h3 class="text-xl font-bold text-dark mb-2">拖拽或点击上传作业图片</h3>
+                                <p class="text-gray-500 mb-6">支持 JPG、PNG、PDF 格式，文件大小不超过 10MB</p>
+                                <input type="file" id="homework-upload" class="hidden" accept="image/*" onchange="handleUpload(this)">
+                                <button onclick="document.getElementById('homework-upload').click()" class="bg-primary text-white px-6 py-3 rounded-xl font-medium hover:bg-primary/90 transition-all">
+                                    <i class="fas fa-upload mr-2"></i> 选择文件
+                                </button>
+                            </div>
+                            
+                            <!-- 模拟上传后显示 -->
+                            <div id="upload-preview" class="hidden mt-8">
+                                <div class="flex gap-6">
+                                    <div class="w-1/2">
+                                        <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=600&h=800&fit=crop" alt="作业图片" class="w-full rounded-xl shadow-lg">
+                                    </div>
+                                    <div class="w-1/2">
+                                        <div class="bg-primary/5 rounded-xl p-6 mb-4">
+                                            <div class="flex items-center gap-3 mb-4">
+                                                <div class="w-10 h-10 bg-primary/20 rounded-lg flex items-center justify-center">
+                                                    <i class="fas fa-spinner fa-spin text-primary"></i>
+                                                </div>
+                                                <div>
+                                                    <h4 class="font-bold text-dark">AI分析中...</h4>
+                                                    <p class="text-sm text-gray-500">预计需要 10-15 秒</p>
+                                                </div>
+                                            </div>
+                                            <div class="space-y-3">
+                                                <div class="flex items-center gap-3">
+                                                    <i class="fas fa-check-circle text-green-500"></i>
+                                                    <span class="text-sm text-gray-600">图片识别完成</span>
+                                                </div>
+                                                <div class="flex items-center gap-3">
+                                                    <i class="fas fa-check-circle text-green-500"></i>
+                                                    <span class="text-sm text-gray-600">题目解析完成</span>
+                                                </div>
+                                                <div class="flex items-center gap-3">
+                                                    <i class="fas fa-spinner fa-spin text-primary"></i>
+                                                    <span class="text-sm text-gray-600">知识点映射中...</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button onclick="showPage('report')" class="w-full bg-primary text-white py-3 rounded-xl font-medium hover:bg-primary/90 transition-all">
+                                            查看分析结果 <i class="fas fa-arrow-right ml-2"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 历史记录 -->
+                        <div class="mt-8">
+                            <h3 class="text-lg font-bold text-dark mb-4">历史记录</h3>
+                            <div class="grid grid-cols-3 gap-4">
+                                <div class="bg-white rounded-xl border border-gray-100 p-4 hover:shadow-lg transition-all cursor-pointer" onclick="showPage('report')">
+                                    <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=300&h=200&fit=crop" alt="" class="w-full h-32 object-cover rounded-lg mb-3">
+                                    <h4 class="font-medium text-dark">数学作业 - 第四章</h4>
+                                    <p class="text-sm text-gray-400">正确率 72% · 8道错题</p>
+                                    <p class="text-xs text-gray-400 mt-2">2024-01-15</p>
+                                </div>
+                                <div class="bg-white rounded-xl border border-gray-100 p-4 hover:shadow-lg transition-all cursor-pointer" onclick="showPage('report')">
+                                    <img src="https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?w=300&h=200&fit=crop" alt="" class="w-full h-32 object-cover rounded-lg mb-3">
+                                    <h4 class="font-medium text-dark">英语单元测试</h4>
+                                    <p class="text-sm text-gray-400">正确率 85% · 3道错题</p>
+                                    <p class="text-xs text-gray-400 mt-2">2024-01-14</p>
+                                </div>
+                                <div class="bg-white rounded-xl border border-gray-100 p-4 hover:shadow-lg transition-all cursor-pointer" onclick="showPage('report')">
+                                    <img src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=300&h=200&fit=crop" alt="" class="w-full h-32 object-cover rounded-lg mb-3">
+                                    <h4 class="font-medium text-dark">物理月考试卷</h4>
+                                    <p class="text-sm text-gray-400">正确率 68% · 12道错题</p>
+                                    <p class="text-xs text-gray-400 mt-2">2024-01-12</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 诊断报告页 -->
+                <div id="page-report" class="page-content hidden">
+                    <div class="mb-8">
+                        <h2 class="text-2xl font-bold text-dark mb-2">作业分析报告</h2>
+                        <p class="text-gray-500">2024年1月15日 · 数学作业 - 第四章</p>
+                    </div>
+                    
+                    <div class="grid grid-cols-3 gap-6 mb-8">
+                        <div class="bg-white rounded-2xl border border-gray-100 p-6">
+                            <div class="flex items-center gap-4 mb-4">
+                                <div class="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center">
+                                    <span class="text-2xl font-bold text-green-600">72%</span>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-dark">正确率</h4>
+                                    <p class="text-sm text-gray-400">18/25 题正确</p>
+                                </div>
+                            </div>
+                            <div class="h-3 bg-gray-100 rounded-full overflow-hidden">
+                                <div class="h-full bg-green-500 rounded-full" style="width: 72%"></div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-2xl border border-gray-100 p-6">
+                            <div class="flex items-center gap-4 mb-4">
+                                <div class="w-14 h-14 bg-red-100 rounded-xl flex items-center justify-center">
+                                    <span class="text-2xl font-bold text-red-600">7</span>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-dark">薄弱知识点</h4>
+                                    <p class="text-sm text-gray-400">需要加强练习</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-2xl border border-gray-100 p-6">
+                            <div class="flex items-center gap-4 mb-4">
+                                <div class="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center">
+                                    <i class="fas fa-clock text-2xl text-blue-600"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-dark">用时 45分钟</h4>
+                                    <p class="text-sm text-gray-400">完成时间正常</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 错题分布 -->
+                    <div class="grid grid-cols-2 gap-6 mb-8">
+                        <div class="bg-white rounded-2xl border border-gray-100 p-6">
+                            <h3 class="font-bold text-dark mb-4">错题知识点分布</h3>
+                            <div class="space-y-4">
+                                <div class="flex items-center gap-4">
+                                    <span class="w-24 text-sm text-gray-600">一次函数</span>
+                                    <div class="flex-1 h-6 bg-gray-100 rounded-lg overflow-hidden">
+                                        <div class="h-full bg-red-500 rounded-lg" style="width: 40%"></div>
+                                    </div>
+                                    <span class="text-sm font-medium text-red-500">4题</span>
+                                </div>
+                                <div class="flex items-center gap-4">
+                                    <span class="w-24 text-sm text-gray-600">全等三角形</span>
+                                    <div class="flex-1 h-6 bg-gray-100 rounded-lg overflow-hidden">
+                                        <div class="h-full bg-orange-500 rounded-lg" style="width: 30%"></div>
+                                    </div>
+                                    <span class="text-sm font-medium text-orange-500">2题</span>
+                                </div>
+                                <div class="flex items-center gap-4">
+                                    <span class="w-24 text-sm text-gray-600">因式分解</span>
+                                    <div class="flex-1 h-6 bg-gray-100 rounded-lg overflow-hidden">
+                                        <div class="h-full bg-yellow-500 rounded-lg" style="width: 30%"></div>
+                                    </div>
+                                    <span class="text-sm font-medium text-yellow-600">1题</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-2xl border border-gray-100 p-6">
+                            <h3 class="font-bold text-dark mb-4">薄弱点诊断</h3>
+                            <div class="space-y-3">
+                                <div class="p-3 bg-red-50 rounded-xl border border-red-100">
+                                    <div class="flex items-center gap-2 mb-1">
+                                        <i class="fas fa-exclamation-circle text-red-500"></i>
+                                        <span class="font-medium text-red-700">一次函数</span>
+                                    </div>
+                                    <p class="text-sm text-red-600/80">对函数图像与性质理解不深</p>
+                                </div>
+                                <div class="p-3 bg-orange-50 rounded-xl border border-orange-100">
+                                    <div class="flex items-center gap-2 mb-1">
+                                        <i class="fas fa-exclamation-circle text-orange-500"></i>
+                                        <span class="font-medium text-orange-700">全等三角形</span>
+                                    </div>
+                                    <p class="text-sm text-orange-600/80">判定定理应用不熟练</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 错题列表 -->
+                    <div class="bg-white rounded-2xl border border-gray-100 p-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="font-bold text-dark">错题详情</h3>
+                            <button onclick="showPage('practice')" class="bg-primary text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-primary/90 transition-all">
+                                <i class="fas fa-magic mr-2"></i>针对练习
+                            </button>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="border border-gray-200 rounded-xl p-4">
+                                <div class="flex items-start gap-4">
+                                    <div class="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                        <span class="text-red-600 font-bold">1</span>
+                                    </div>
+                                    <div class="flex-1">
+                                        <p class="text-dark font-medium mb-2">已知一次函数 y = kx + b 的图像经过点 (1, 2) 和 (3, 6)，求 k 和 b 的值。</p>
+                                        <div class="grid grid-cols-2 gap-4 mb-3">
+                                            <div class="p-3 bg-red-50 rounded-lg">
+                                                <p class="text-sm text-gray-500 mb-1">你的答案</p>
+                                                <p class="text-red-600">k=1, b=2</p>
+                                            </div>
+                                            <div class="p-3 bg-green-50 rounded-lg">
+                                                <p class="text-sm text-gray-500 mb-1">正确答案</p>
+                                                <p class="text-green-600">k=2, b=0</p>
+                                            </div>
+                                        </div>
+                                        <div class="p-3 bg-blue-50 rounded-lg">
+                                            <p class="text-sm text-gray-500 mb-1">解题思路</p>
+                                            <p class="text-blue-700">将两点代入方程组：2=k+b, 6=3k+b，解得 k=2, b=0</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="border border-gray-200 rounded-xl p-4">
+                                <div class="flex items-start gap-4">
+                                    <div class="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                        <span class="text-red-600 font-bold">2</span>
+                                    </div>
+                                    <div class="flex-1">
+                                        <p class="text-dark font-medium mb-2">判断：两个三角形如果三条边分别相等，则这两个三角形全等。</p>
+                                        <div class="grid grid-cols-2 gap-4 mb-3">
+                                            <div class="p-3 bg-red-50 rounded-lg">
+                                                <p class="text-sm text-gray-500 mb-1">你的答案</p>
+                                                <p class="text-red-600">错误</p>
+                                            </div>
+                                            <div class="p-3 bg-green-50 rounded-lg">
+                                                <p class="text-sm text-gray-500 mb-1">正确答案</p>
+                                                <p class="text-green-600">正确</p>
+                                            </div>
+                                        </div>
+                                        <div class="p-3 bg-blue-50 rounded-lg">
+                                            <p class="text-sm text-gray-500 mb-1">知识点</p>
+                                            <p class="text-blue-700">SSS判定定理：三边对应相等的两个三角形全等</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 练习中心 -->
+                <div id="page-practice" class="page-content hidden">
+                    <div class="mb-8">
+                        <h2 class="text-2xl font-bold text-dark mb-2">练习中心</h2>
+                        <p class="text-gray-500">根据你的薄弱点定制的个性化练习，每个练习卡片都有打印、导出、批阅功能</p>
+                    </div>
+                    
+                    <!-- 上传批阅弹窗 -->
+                    <div id="grade-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+                        <div class="bg-white rounded-2xl p-6 w-full max-w-2xl shadow-2xl max-h-[90vh] overflow-y-auto">
+                            <div class="flex items-center justify-between mb-6">
+                                <h3 class="text-xl font-bold text-dark">拍照批阅</h3>
+                                <button onclick="closeGradeModal()" class="p-2 hover:bg-gray-100 rounded-lg transition-all">
+                                    <i class="fas fa-times text-gray-400"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">选择练习卷</label>
+                                    <select id="grade-select" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary">
+                                        <option value="function">一次函数专项</option>
+                                        <option value="triangle">全等三角形判定</option>
+                                        <option value="factor">因式分解进阶</option>
+                                        <option value="comprehensive">第四章综合测试</option>
+                                    </select>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">上传答题照片</label>
+                                    <div id="grade-upload-area" class="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-primary/50 transition-all cursor-pointer" onclick="document.getElementById('grade-file-input').click()">
+                                        <div id="grade-upload-placeholder">
+                                            <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-3"></i>
+                                            <p class="text-gray-600 mb-2">点击或拖拽上传答题照片</p>
+                                            <p class="text-sm text-gray-400">支持 JPG、PNG 格式</p>
+                                        </div>
+                                        <div id="grade-upload-preview" class="hidden">
+                                            <img id="grade-preview-img" src="" alt="预览" class="max-h-48 mx-auto rounded-lg mb-3">
+                                            <p id="grade-file-name" class="text-sm text-gray-500"></p>
+                                        </div>
+                                    </div>
+                                    <input type="file" id="grade-file-input" class="hidden" accept="image/*" onchange="handleGradeUpload(this)">
+                                </div>
+                                
+                                <div class="bg-amber-50 rounded-xl p-4 border border-amber-200">
+                                    <p class="text-amber-800 text-sm"><i class="fas fa-info-circle mr-2"></i>请确保照片清晰，光线充足，能清楚看到手写答案。</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex gap-3 mt-6">
+                                <button onclick="closeGradeModal()" class="flex-1 px-4 py-3 bg-gray-100 text-gray-700 rounded-xl font-medium hover:bg-gray-200 transition-all">
+                                    取消
+                                </button>
+                                <button onclick="startGrading()" class="flex-1 px-4 py-3 bg-primary text-white rounded-xl font-medium hover:bg-primary/90 transition-all">
+                                    <i class="fas fa-check mr-2"></i>开始批阅
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 批阅结果弹窗 -->
+                    <div id="grade-result-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+                        <div class="bg-white rounded-2xl p-6 w-full max-w-2xl shadow-2xl max-h-[90vh] overflow-y-auto">
+                            <div class="text-center mb-6">
+                                <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <i class="fas fa-check text-4xl text-green-600"></i>
+                                </div>
+                                <h3 class="text-2xl font-bold text-dark mb-2">批阅完成！</h3>
+                                <p class="text-gray-500">一次函数专项练习</p>
+                            </div>
+                            
+                            <div class="grid grid-cols-3 gap-4 mb-6">
+                                <div class="bg-green-50 rounded-xl p-4 text-center">
+                                    <p class="text-3xl font-bold text-green-600">80%</p>
+                                    <p class="text-sm text-gray-600">正确率</p>
+                                </div>
+                                <div class="bg-red-50 rounded-xl p-4 text-center">
+                                    <p class="text-3xl font-bold text-red-600">3题</p>
+                                    <p class="text-sm text-gray-600">错误</p>
+                                </div>
+                                <div class="bg-blue-50 rounded-xl p-4 text-center">
+                                    <p class="text-3xl font-bold text-blue-600">12题</p>
+                                    <p class="text-sm text-gray-600">正确</p>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-primary/5 rounded-xl p-4 mb-6">
+                                <h4 class="font-bold text-primary mb-2"><i class="fas fa-lightbulb mr-2"></i>AI分析</h4>
+                                <p class="text-gray-600 text-sm">本次练习主要失分点在<strong>一次函数图像与坐标轴交点</strong>相关题目。建议加强这部分内容的复习。</p>
+                            </div>
+                            
+                            <div class="bg-red-50 rounded-xl p-4 mb-6">
+                                <h4 class="font-bold text-red-600 mb-2"><i class="fas fa-exclamation-triangle mr-2"></i>错题分析</h4>
+                                <div class="space-y-2 text-sm text-gray-600">
+                                    <p><strong>第3题：</strong>一次函数与坐标轴交点计算错误</p>
+                                    <p><strong>第7题：</strong>函数图像象限判断混淆</p>
+                                    <p><strong>第12题：</strong>两点求函数解析式步骤不完整</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex gap-3">
+                                <button onclick="closeGradeResult()" class="px-4 py-3 bg-gray-100 text-gray-700 rounded-xl font-medium hover:bg-gray-200 transition-all">
+                                    关闭
+                                </button>
+                                <button onclick="startReinforce(); closeGradeResult();" class="flex-1 px-4 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl font-medium hover:opacity-90 transition-all">
+                                    <i class="fas fa-bolt mr-2"></i>强化练习
+                                </button>
+                                <button onclick="saveGradeResult(); closeGradeResult();" class="flex-1 px-4 py-3 bg-primary text-white rounded-xl font-medium hover:bg-primary/90 transition-all">
+                                    <i class="fas fa-save mr-2"></i>保存记录
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 导出设置弹窗 -->
+                    <div id="export-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+                        <div class="bg-white rounded-2xl p-6 w-full max-w-md shadow-2xl">
+                            <div class="flex items-center justify-between mb-6">
+                                <h3 class="text-xl font-bold text-dark">导出练习</h3>
+                                <button onclick="closeExportModal()" class="p-2 hover:bg-gray-100 rounded-lg transition-all">
+                                    <i class="fas fa-times text-gray-400"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">选择练习</label>
+                                    <select id="export-select" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary">
+                                        <option value="all">全部练习 (4套)</option>
+                                        <option value="function">一次函数专项</option>
+                                        <option value="triangle">全等三角形判定</option>
+                                        <option value="factor">因式分解进阶</option>
+                                        <option value="comprehensive">第四章综合测试</option>
+                                    </select>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">导出格式</label>
+                                    <div class="grid grid-cols-2 gap-3">
+                                        <label class="flex items-center gap-3 p-4 border-2 border-primary bg-primary/5 rounded-xl cursor-pointer">
+                                            <input type="radio" name="format" value="pdf" checked class="w-5 h-5 text-primary">
+                                            <div>
+                                                <span class="text-dark font-medium">PDF 文档</span>
+                                                <p class="text-xs text-gray-400">适合打印</p>
+                                            </div>
+                                        </label>
+                                        <label class="flex items-center gap-3 p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-primary/50">
+                                            <input type="radio" name="format" value="word" class="w-5 h-5 text-primary">
+                                            <div>
+                                                <span class="text-dark font-medium">Word 文档</span>
+                                                <p class="text-xs text-gray-400">可编辑</p>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">包含内容</label>
+                                    <div class="space-y-2">
+                                        <label class="flex items-center gap-3">
+                                            <input type="checkbox" checked class="w-4 h-4 text-primary rounded">
+                                            <span class="text-gray-600">题目内容</span>
+                                        </label>
+                                        <label class="flex items-center gap-3">
+                                            <input type="checkbox" checked class="w-4 h-4 text-primary rounded">
+                                            <span class="text-gray-600">空白答题区</span>
+                                        </label>
+                                        <label class="flex items-center gap-3">
+                                            <input type="checkbox" class="w-4 h-4 text-primary rounded">
+                                            <span class="text-gray-600">答案解析</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex gap-3 mt-6">
+                                <button onclick="closeExportModal()" class="flex-1 px-4 py-3 bg-gray-100 text-gray-700 rounded-xl font-medium hover:bg-gray-200 transition-all">
+                                    取消
+                                </button>
+                                <button onclick="startExport()" class="flex-1 px-4 py-3 bg-primary text-white rounded-xl font-medium hover:bg-primary/90 transition-all">
+                                    <i class="fas fa-download mr-2"></i>确认导出
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 导出进度弹窗 -->
+                    <div id="export-progress" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+                        <div class="bg-white rounded-2xl p-8 w-full max-w-sm shadow-2xl text-center">
+                            <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-spinner fa-spin text-3xl text-primary"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-dark mb-2">正在生成练习文件...</h3>
+                            <p class="text-gray-500 text-sm mb-4">请稍候</p>
+                            <div class="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                                <div id="export-progress-bar" class="h-full bg-primary rounded-full transition-all" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 科目选择 -->
+                    <div class="flex gap-4 mb-8">
+                        <button class="px-6 py-3 bg-primary text-white rounded-xl font-medium">全部科目</button>
+                        <button class="px-6 py-3 bg-white text-gray-700 rounded-xl font-medium hover:bg-gray-100 transition-all">数学</button>
+                        <button class="px-6 py-3 bg-white text-gray-700 rounded-xl font-medium hover:bg-gray-100 transition-all">英语</button>
+                        <button class="px-6 py-3 bg-white text-gray-700 rounded-xl font-medium hover:bg-gray-100 transition-all">物理</button>
+                    </div>
+                    
+                    <!-- 练习列表 -->
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="bg-white rounded-2xl border border-gray-100 p-6 card-hover transition-all cursor-pointer" onclick="showPage('quiz')">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center">
+                                        <span class="text-xl font-bold text-red-600">函</span>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-bold text-dark">一次函数专项</h3>
+                                        <p class="text-sm text-gray-400">15道题 · 预计20分钟</p>
+                                    </div>
+                                </div>
+                                <span class="px-3 py-1 bg-red-100 text-red-600 rounded-full text-sm font-medium">薄弱</span>
+                            </div>
+                            <div class="flex items-center gap-4 text-sm text-gray-500 mb-4">
+                                <span><i class="fas fa-fire mr-1"></i> 234人已练</span>
+                                <span><i class="fas fa-star mr-1"></i> 4.8分</span>
+                            </div>
+                            <div class="pt-4 border-t border-gray-100">
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="text-sm text-gray-400">正确率目标：80%</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <button onclick="showPage('quiz')" class="flex-1 bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary/90 transition-all">
+                                        开始练习
+                                    </button>
+                                    <button onclick="printSinglePractice('一次函数专项')" class="px-3 py-2 border border-gray-200 text-gray-600 rounded-lg hover:bg-gray-50 transition-all" title="打印">
+                                        <i class="fas fa-print"></i>
+                                    </button>
+                                    <button onclick="exportSinglePractice('一次函数专项')" class="px-3 py-2 border border-gray-200 text-gray-600 rounded-lg hover:bg-gray-50 transition-all" title="导出">
+                                        <i class="fas fa-file-export"></i>
+                                    </button>
+                                    <button onclick="openGradeForPractice('一次函数专项')" class="px-3 py-2 border border-gray-200 text-gray-600 rounded-lg hover:bg-gray-50 transition-all" title="批阅">
+                                        <i class="fas fa-check-double"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-2xl border border-gray-100 p-6 card-hover transition-all">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center">
+                                        <span class="text-xl font-bold text-orange-600">几</span>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-bold text-dark">全等三角形判定</h3>
+                                        <p class="text-sm text-gray-400">12道题 · 预计15分钟</p>
+                                    </div>
+                                </div>
+                                <span class="px-3 py-1 bg-orange-100 text-orange-600 rounded-full text-sm font-medium">薄弱</span>
+                            </div>
+                            <div class="flex items-center gap-4 text-sm text-gray-500 mb-4">
+                                <span><i class="fas fa-fire mr-1"></i> 189人已练</span>
+                                <span><i class="fas fa-star mr-1"></i> 4.6分</span>
+                            </div>
+                            <div class="pt-4 border-t border-gray-100">
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="text-sm text-gray-400">正确率目标：75%</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <button onclick="showPage('quiz')" class="flex-1 bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary/90 transition-all">
+                                        开始练习
+                                    </button>
+                                    <button onclick="printSinglePractice('全等三角形判定')" class="px-3 py-2 border border-gray-200 text-gray-600 rounded-lg hover:bg-gray-50 transition-all" title="打印">
+                                        <i class="fas fa-print"></i>
+                                    </button>
+                                    <button onclick="exportSinglePractice('全等三角形判定')" class="px-3 py-2 border border-gray-200 text-gray-600 rounded-lg hover:bg-gray-50 transition-all" title="导出">
+                                        <i class="fas fa-file-export"></i>
+                                    </button>
+                                    <button onclick="openGradeForPractice('全等三角形判定')" class="px-3 py-2 border border-gray-200 text-gray-600 rounded-lg hover:bg-gray-50 transition-all" title="批阅">
+                                        <i class="fas fa-check-double"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-2xl border border-gray-100 p-6 card-hover transition-all">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
+                                        <span class="text-xl font-bold text-green-600">代</span>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-bold text-dark">因式分解进阶</h3>
+                                        <p class="text-sm text-gray-400">10道题 · 预计12分钟</p>
+                                    </div>
+                                </div>
+                                <span class="px-3 py-1 bg-yellow-100 text-yellow-600 rounded-full text-sm font-medium">待提升</span>
+                            </div>
+                            <div class="flex items-center gap-4 text-sm text-gray-500 mb-4">
+                                <span><i class="fas fa-fire mr-1"></i> 312人已练</span>
+                                <span><i class="fas fa-star mr-1"></i> 4.9分</span>
+                            </div>
+                            <div class="pt-4 border-t border-gray-100">
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="text-sm text-gray-400">正确率目标：85%</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <button onclick="showPage('quiz')" class="flex-1 bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary/90 transition-all">
+                                        开始练习
+                                    </button>
+                                    <button onclick="printSinglePractice('因式分解进阶')" class="px-3 py-2 border border-gray-200 text-gray-600 rounded-lg hover:bg-gray-50 transition-all" title="打印">
+                                        <i class="fas fa-print"></i>
+                                    </button>
+                                    <button onclick="exportSinglePractice('因式分解进阶')" class="px-3 py-2 border border-gray-200 text-gray-600 rounded-lg hover:bg-gray-50 transition-all" title="导出">
+                                        <i class="fas fa-file-export"></i>
+                                    </button>
+                                    <button onclick="openGradeForPractice('因式分解进阶')" class="px-3 py-2 border border-gray-200 text-gray-600 rounded-lg hover:bg-gray-50 transition-all" title="批阅">
+                                        <i class="fas fa-check-double"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-2xl border border-gray-100 p-6 card-hover transition-all">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+                                        <span class="text-xl font-bold text-blue-600">综</span>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-bold text-dark">第四章综合测试</h3>
+                                        <p class="text-sm text-gray-400">25道题 · 预计30分钟</p>
+                                    </div>
+                                </div>
+                                <span class="px-3 py-1 bg-blue-100 text-blue-600 rounded-full text-sm font-medium">综合</span>
+                            </div>
+                            <div class="flex items-center gap-4 text-sm text-gray-500 mb-4">
+                                <span><i class="fas fa-fire mr-1"></i> 456人已练</span>
+                                <span><i class="fas fa-star mr-1"></i> 4.7分</span>
+                            </div>
+                            <div class="pt-4 border-t border-gray-100">
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="text-sm text-gray-400">正确率目标：70%</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <button onclick="showPage('quiz')" class="flex-1 bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary/90 transition-all">
+                                        开始练习
+                                    </button>
+                                    <button onclick="printSinglePractice('第四章综合测试')" class="px-3 py-2 border border-gray-200 text-gray-600 rounded-lg hover:bg-gray-50 transition-all" title="打印">
+                                        <i class="fas fa-print"></i>
+                                    </button>
+                                    <button onclick="exportSinglePractice('第四章综合测试')" class="px-3 py-2 border border-gray-200 text-gray-600 rounded-lg hover:bg-gray-50 transition-all" title="导出">
+                                        <i class="fas fa-file-export"></i>
+                                    </button>
+                                    <button onclick="openGradeForPractice('第四章综合测试')" class="px-3 py-2 border border-gray-200 text-gray-600 rounded-lg hover:bg-gray-50 transition-all" title="批阅">
+                                        <i class="fas fa-check-double"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 答题页 -->
+                <div id="page-quiz" class="page-content hidden">
+                    <div class="max-w-3xl mx-auto">
+                        <div class="flex items-center justify-between mb-6">
+                            <button onclick="showPage('practice')" class="p-2 hover:bg-gray-100 rounded-lg transition-all">
+                                <i class="fas fa-arrow-left text-gray-600"></i>
+                            </button>
+                            <div class="flex items-center gap-4">
+                                <span class="text-sm text-gray-500">第 <span class="font-bold text-primary">3</span> / 15 题</span>
+                                <div class="w-48 h-2 bg-gray-200 rounded-full overflow-hidden">
+                                    <div class="h-full bg-primary rounded-full transition-all" style="width: 20%"></div>
+                                </div>
+                            </div>
+                            <button class="p-2 hover:bg-gray-100 rounded-lg transition-all">
+                                <i class="fas fa-clock text-gray-600"></i>
+                                <span class="ml-1 text-sm text-gray-600">18:42</span>
+                            </button>
+                        </div>
+                        
+                        <div class="bg-white rounded-2xl border border-gray-100 p-8">
+                            <div class="mb-6">
+                                <span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium">一次函数</span>
+                            </div>
+                            
+                            <h3 class="text-xl font-bold text-dark mb-6">已知一次函数 y = 2x + b 的图像经过点 (1, 5)，则 b 的值为多少？</h3>
+                            
+                            <div class="space-y-4">
+                                <label class="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-primary/50 transition-all">
+                                    <input type="radio" name="answer" class="w-5 h-5 text-primary">
+                                    <span class="text-dark">A. 1</span>
+                                </label>
+                                <label class="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-primary/50 transition-all">
+                                    <input type="radio" name="answer" class="w-5 h-5 text-primary">
+                                    <span class="text-dark">B. 2</span>
+                                </label>
+                                <label class="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-primary/50 transition-all">
+                                    <input type="radio" name="answer" class="w-5 h-5 text-primary">
+                                    <span class="text-dark">C. 3</span>
+                                </label>
+                                <label class="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-primary/50 transition-all">
+                                    <input type="radio" name="answer" class="w-5 h-5 text-primary">
+                                    <span class="text-dark">D. 4</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center justify-between mt-6">
+                            <button class="px-6 py-3 bg-gray-100 text-gray-700 rounded-xl font-medium hover:bg-gray-200 transition-all">
+                                上一题
+                            </button>
+                            <button class="px-6 py-3 bg-primary text-white rounded-xl font-medium hover:bg-primary/90 transition-all">
+                                提交答案
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 批阅历史页面 -->
+                <div id="page-grade-history" class="page-content hidden">
+                    <div class="mb-8">
+                        <h2 class="text-2xl font-bold text-dark mb-2">批阅历史</h2>
+                        <p class="text-gray-500">管理所有练习批阅记录，进行强化练习</p>
+                    </div>
+                    
+                    <!-- 筛选栏 -->
+                    <div class="flex items-center gap-4 mb-6">
+                        <button class="px-6 py-3 bg-primary text-white rounded-xl font-medium">全部</button>
+                        <button class="px-6 py-3 bg-white text-gray-700 rounded-xl font-medium hover:bg-gray-100 transition-all">已批阅</button>
+                        <button class="px-6 py-3 bg-white text-gray-700 rounded-xl font-medium hover:bg-gray-100 transition-all">强化完成</button>
+                    </div>
+                    
+                    <!-- 历史列表 -->
+                    <div class="space-y-4">
+                        <!-- 记录1 -->
+                        <div class="bg-white rounded-2xl border border-gray-100 p-6 hover:shadow-lg transition-all">
+                            <div class="flex items-start gap-4">
+                                <div class="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-check-double text-green-600 text-2xl"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-3 mb-2">
+                                        <h3 class="text-lg font-bold text-dark">一次函数专项</h3>
+                                        <span class="px-3 py-1 bg-green-100 text-green-600 rounded-full text-sm font-medium">已批阅</span>
+                                        <span class="text-sm text-gray-400">今天 14:30</span>
+                                    </div>
+                                    <div class="grid grid-cols-4 gap-4 mb-4">
+                                        <div class="bg-blue-50 rounded-lg p-3 text-center">
+                                            <p class="text-2xl font-bold text-blue-600">80%</p>
+                                            <p class="text-xs text-gray-500">正确率</p>
+                                        </div>
+                                        <div class="bg-green-50 rounded-lg p-3 text-center">
+                                            <p class="text-2xl font-bold text-green-600">12</p>
+                                            <p class="text-xs text-gray-500">正确</p>
+                                        </div>
+                                        <div class="bg-red-50 rounded-lg p-3 text-center">
+                                            <p class="text-2xl font-bold text-red-600">3</p>
+                                            <p class="text-xs text-gray-500">错误</p>
+                                        </div>
+                                        <div class="bg-orange-50 rounded-lg p-3 text-center">
+                                            <p class="text-2xl font-bold text-orange-600">3题</p>
+                                            <p class="text-xs text-gray-500">已强化</p>
+                                        </div>
+                                    </div>
+                                    <div class="bg-red-50 rounded-xl p-3 mb-4">
+                                        <p class="text-sm text-red-700"><i class="fas fa-exclamation-circle mr-2"></i>错题：第3题(交点计算)、第7题(象限判断)、第12题(解析式)</p>
+                                    </div>
+                                    <div class="flex gap-3">
+                                        <button onclick="openGradeDetailModal('latest')" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition-all">
+                                            <i class="fas fa-eye mr-2"></i>查看详情
+                                        </button>
+                                        <button onclick="startReinforceFromHistory('一次函数专项')" class="px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-lg font-medium hover:opacity-90 transition-all">
+                                            <i class="fas fa-bolt mr-2"></i>强化练习
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 记录2 -->
+                        <div class="bg-white rounded-2xl border border-gray-100 p-6 hover:shadow-lg transition-all">
+                            <div class="flex items-start gap-4">
+                                <div class="w-14 h-14 bg-orange-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-trophy text-orange-600 text-2xl"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-3 mb-2">
+                                        <h3 class="text-lg font-bold text-dark">全等三角形判定</h3>
+                                        <span class="px-3 py-1 bg-orange-100 text-orange-600 rounded-full text-sm font-medium">强化完成</span>
+                                        <span class="text-sm text-gray-400">昨天 16:20</span>
+                                    </div>
+                                    <div class="grid grid-cols-4 gap-4 mb-4">
+                                        <div class="bg-blue-50 rounded-lg p-3 text-center">
+                                            <p class="text-2xl font-bold text-blue-600">92%</p>
+                                            <p class="text-xs text-gray-500">正确率</p>
+                                        </div>
+                                        <div class="bg-green-50 rounded-lg p-3 text-center">
+                                            <p class="text-2xl font-bold text-green-600">11</p>
+                                            <p class="text-xs text-gray-500">正确</p>
+                                        </div>
+                                        <div class="bg-red-50 rounded-lg p-3 text-center">
+                                            <p class="text-2xl font-bold text-red-600">1</p>
+                                            <p class="text-xs text-gray-500">错误</p>
+                                        </div>
+                                        <div class="bg-green-50 rounded-lg p-3 text-center">
+                                            <p class="text-2xl font-bold text-green-600">+17%</p>
+                                            <p class="text-xs text-gray-500">提升</p>
+                                        </div>
+                                    </div>
+                                    <div class="bg-green-50 rounded-xl p-3 mb-4">
+                                        <p class="text-sm text-green-700"><i class="fas fa-check-circle mr-2"></i>强化后正确率从75%提升至92%，知识点已掌握</p>
+                                    </div>
+                                    <div class="flex gap-3">
+                                        <button onclick="openGradeDetailModal('history1')" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition-all">
+                                            <i class="fas fa-eye mr-2"></i>查看详情
+                                        </button>
+                                        <button onclick="startReinforceFromHistory('全等三角形判定')" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition-all">
+                                            <i class="fas fa-redo mr-2"></i>再次练习
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 记录3 -->
+                        <div class="bg-white rounded-2xl border border-gray-100 p-6 hover:shadow-lg transition-all">
+                            <div class="flex items-start gap-4">
+                                <div class="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-check-double text-blue-600 text-2xl"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-3 mb-2">
+                                        <h3 class="text-lg font-bold text-dark">因式分解进阶</h3>
+                                        <span class="px-3 py-1 bg-blue-100 text-blue-600 rounded-full text-sm font-medium">已批阅</span>
+                                        <span class="text-sm text-gray-400">3天前</span>
+                                    </div>
+                                    <div class="grid grid-cols-4 gap-4 mb-4">
+                                        <div class="bg-blue-50 rounded-lg p-3 text-center">
+                                            <p class="text-2xl font-bold text-blue-600">70%</p>
+                                            <p class="text-xs text-gray-500">正确率</p>
+                                        </div>
+                                        <div class="bg-green-50 rounded-lg p-3 text-center">
+                                            <p class="text-2xl font-bold text-green-600">7</p>
+                                            <p class="text-xs text-gray-500">正确</p>
+                                        </div>
+                                        <div class="bg-red-50 rounded-lg p-3 text-center">
+                                            <p class="text-2xl font-bold text-red-600">3</p>
+                                            <p class="text-xs text-gray-500">错误</p>
+                                        </div>
+                                        <div class="bg-gray-100 rounded-lg p-3 text-center">
+                                            <p class="text-2xl font-bold text-gray-400">0</p>
+                                            <p class="text-xs text-gray-500">已强化</p>
+                                        </div>
+                                    </div>
+                                    <div class="bg-red-50 rounded-xl p-3 mb-4">
+                                        <p class="text-sm text-red-700"><i class="fas fa-exclamation-circle mr-2"></i>错题：第2题、第5题、第8题 - 建议尽快进行强化练习</p>
+                                    </div>
+                                    <div class="flex gap-3">
+                                        <button onclick="openGradeDetailModal('history2')" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition-all">
+                                            <i class="fas fa-eye mr-2"></i>查看详情
+                                        </button>
+                                        <button onclick="startReinforceFromHistory('因式分解进阶')" class="px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-lg font-medium hover:opacity-90 transition-all">
+                                            <i class="fas fa-bolt mr-2"></i>强化练习
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 记录4 -->
+                        <div class="bg-white rounded-2xl border border-gray-100 p-6 hover:shadow-lg transition-all">
+                            <div class="flex items-start gap-4">
+                                <div class="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-check-double text-purple-600 text-2xl"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-3 mb-2">
+                                        <h3 class="text-lg font-bold text-dark">第四章综合测试</h3>
+                                        <span class="px-3 py-1 bg-purple-100 text-purple-600 rounded-full text-sm font-medium">已批阅</span>
+                                        <span class="text-sm text-gray-400">1周前</span>
+                                    </div>
+                                    <div class="grid grid-cols-4 gap-4 mb-4">
+                                        <div class="bg-blue-50 rounded-lg p-3 text-center">
+                                            <p class="text-2xl font-bold text-blue-600">68%</p>
+                                            <p class="text-xs text-gray-500">正确率</p>
+                                        </div>
+                                        <div class="bg-green-50 rounded-lg p-3 text-center">
+                                            <p class="text-2xl font-bold text-green-600">17</p>
+                                            <p class="text-xs text-gray-500">正确</p>
+                                        </div>
+                                        <div class="bg-red-50 rounded-lg p-3 text-center">
+                                            <p class="text-2xl font-bold text-red-600">8</p>
+                                            <p class="text-xs text-gray-500">错误</p>
+                                        </div>
+                                        <div class="bg-gray-100 rounded-lg p-3 text-center">
+                                            <p class="text-2xl font-bold text-gray-400">0</p>
+                                            <p class="text-xs text-gray-500">已强化</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex gap-3">
+                                        <button onclick="openGradeDetailModal('history3')" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition-all">
+                                            <i class="fas fa-eye mr-2"></i>查看详情
+                                        </button>
+                                        <button onclick="startReinforceFromHistory('第四章综合测试')" class="px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-lg font-medium hover:opacity-90 transition-all">
+                                            <i class="fas fa-bolt mr-2"></i>强化练习
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 批阅详情弹窗 -->
+                <div id="grade-detail-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+                    <div class="bg-white rounded-2xl p-6 w-full max-w-3xl shadow-2xl max-h-[90vh] overflow-y-auto">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-xl font-bold text-dark">批阅详情 - 一次函数专项</h3>
+                            <button onclick="closeGradeDetailModal()" class="p-2 hover:bg-gray-100 rounded-lg transition-all">
+                                <i class="fas fa-times text-gray-400"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="grid grid-cols-4 gap-4 mb-6">
+                            <div class="bg-blue-50 rounded-xl p-4 text-center">
+                                <p class="text-2xl font-bold text-blue-600">80%</p>
+                                <p class="text-sm text-gray-600">正确率</p>
+                            </div>
+                            <div class="bg-green-50 rounded-xl p-4 text-center">
+                                <p class="text-2xl font-bold text-green-600">12题</p>
+                                <p class="text-sm text-gray-600">正确</p>
+                            </div>
+                            <div class="bg-red-50 rounded-xl p-4 text-center">
+                                <p class="text-2xl font-bold text-red-600">3题</p>
+                                <p class="text-sm text-gray-600">错误</p>
+                            </div>
+                            <div class="bg-orange-50 rounded-xl p-4 text-center">
+                                <p class="text-2xl font-bold text-orange-600">3题</p>
+                                <p class="text-sm text-gray-600">已强化</p>
+                            </div>
+                        </div>
+                        
+                        <h4 class="font-bold text-dark mb-4">错题详情</h4>
+                        <div class="space-y-4 mb-6">
+                            <div class="border border-red-200 rounded-xl p-4 bg-red-50">
+                                <div class="flex items-start gap-3 mb-3">
+                                    <span class="w-8 h-8 bg-red-500 text-white rounded-lg flex items-center justify-center font-bold">3</span>
+                                    <div>
+                                        <p class="font-medium text-dark">已知一次函数 y = 3x + b 与 x 轴交于点 (-2, 0)，求 b 的值。</p>
+                                        <p class="text-sm text-red-600 mt-1">你的答案：b = 6 ✗</p>
+                                        <p class="text-sm text-green-600 mt-1">正确答案：b = -6</p>
+                                    </div>
+                                </div>
+                                <div class="bg-white rounded-lg p-3">
+                                    <p class="text-sm text-gray-600"><strong>解析：</strong>与 x 轴交点即 y=0，代入得 0 = 3×(-2) + b，解得 b = 6？不对，应该是 b = -6。</p>
+                                </div>
+                            </div>
+                            
+                            <div class="border border-red-200 rounded-xl p-4 bg-red-50">
+                                <div class="flex items-start gap-3 mb-3">
+                                    <span class="w-8 h-8 bg-red-500 text-white rounded-lg flex items-center justify-center font-bold">7</span>
+                                    <div>
+                                        <p class="font-medium text-dark">判断：一次函数 y = -2x + 5 的图像经过哪几个象限？</p>
+                                        <p class="text-sm text-red-600 mt-1">你的答案：一、二、四象限 ✗</p>
+                                        <p class="text-sm text-green-600 mt-1">正确答案：二、一、四象限</p>
+                                    </div>
+                                </div>
+                                <div class="bg-white rounded-lg p-3">
+                                    <p class="text-sm text-gray-600"><strong>解析：</strong>k=-2<0，经过二、四象限；b=5>0，与 y 轴交于正半轴，所以还经过一象限。</p>
+                                </div>
+                            </div>
+                            
+                            <div class="border border-red-200 rounded-xl p-4 bg-red-50">
+                                <div class="flex items-start gap-3 mb-3">
+                                    <span class="w-8 h-8 bg-red-500 text-white rounded-lg flex items-center justify-center font-bold">12</span>
+                                    <div>
+                                        <p class="font-medium text-dark">已知两点 A(1, 2) 和 B(3, 6)，求一次函数解析式。</p>
+                                        <p class="text-sm text-red-600 mt-1">你的答案：y = 2x ✗</p>
+                                        <p class="text-sm text-green-600 mt-1">正确答案：y = 2x</p>
+                                    </div>
+                                </div>
+                                <div class="bg-white rounded-lg p-3">
+                                    <p class="text-sm text-gray-600"><strong>解析：</strong>代入两点：2=k+b, 6=3k+b，两式相减得 k=2，代入得 b=0，解析式为 y=2x。</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex gap-3">
+                            <button onclick="closeGradeDetailModal()" class="flex-1 px-4 py-3 bg-gray-100 text-gray-700 rounded-xl font-medium hover:bg-gray-200 transition-all">
+                                关闭
+                            </button>
+                            <button onclick="startReinforce(); closeGradeDetailModal();" class="flex-1 px-4 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl font-medium hover:opacity-90 transition-all">
+                                <i class="fas fa-bolt mr-2"></i>强化练习
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 二次强化练习页 -->
+                <div id="page-reinforce" class="page-content hidden">
+                    <div class="max-w-3xl mx-auto">
+                        <div class="flex items-center justify-between mb-6">
+                            <button onclick="showPage('practice')" class="p-2 hover:bg-gray-100 rounded-lg transition-all">
+                                <i class="fas fa-arrow-left text-gray-600"></i>
+                            </button>
+                            <div class="flex items-center gap-3">
+                                <span class="px-3 py-1 bg-orange-100 text-orange-600 rounded-full text-sm font-medium">
+                                    <i class="fas fa-bolt mr-1"></i>二次强化
+                                </span>
+                                <span class="text-sm text-gray-500">针对错题专项练习</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-sm text-gray-500">第 <span class="font-bold text-primary">1</span> / 3 题</span>
+                                <div class="w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
+                                    <div class="h-full bg-orange-500 rounded-full transition-all" style="width: 33%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gradient-to-r from-orange-50 to-red-50 rounded-xl p-4 mb-6 border border-orange-100">
+                            <div class="flex items-center gap-3">
+                                <i class="fas fa-magic text-orange-500 text-xl"></i>
+                                <div>
+                                    <p class="text-sm text-orange-800 font-medium">AI智能生成 - 变体强化练习</p>
+                                    <p class="text-xs text-orange-600">基于错题知识点生成同类型变式题，考察知识点一致但题目参数不同</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-2xl border border-gray-100 p-8">
+                            <div class="mb-6">
+                                <span class="px-3 py-1 bg-red-100 text-red-600 rounded-full text-sm font-medium">一次函数 · 易错题</span>
+                            </div>
+                            
+                            <h3 class="text-xl font-bold text-dark mb-6">已知一次函数 y = 3x + b 与 x 轴交于点 (-2, 0)，求 b 的值。</h3>
+                            
+                            <div class="space-y-4">
+                                <label class="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-orange-500/50 transition-all">
+                                    <input type="radio" name="reinforce-answer" class="w-5 h-5 text-orange-500">
+                                    <span class="text-dark">A. b = 6</span>
+                                </label>
+                                <label class="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-orange-500/50 transition-all">
+                                    <input type="radio" name="reinforce-answer" class="w-5 h-5 text-orange-500">
+                                    <span class="text-dark">B. b = -6</span>
+                                </label>
+                                <label class="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-orange-500/50 transition-all">
+                                    <input type="radio" name="reinforce-answer" class="w-5 h-5 text-orange-500">
+                                    <span class="text-dark">C. b = 2</span>
+                                </label>
+                                <label class="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-orange-500/50 transition-all">
+                                    <input type="radio" name="reinforce-answer" class="w-5 h-5 text-orange-500">
+                                    <span class="text-dark">D. b = -2</span>
+                                </label>
+                            </div>
+</div>
+                        
+                        <div class="bg-blue-50 rounded-xl p-4 mt-6">
+                            <h4 class="font-bold text-blue-800 mb-2"><i class="fas fa-lightbulb mr-2"></i>解题提示</h4>
+                            <p class="text-sm text-blue-700">与 x 轴交点意味着 y = 0，代入方程求解 b 的值。</p>
+                        </div>
+                        
+                        <div class="flex items-center justify-between mt-6">
+                            <button class="px-6 py-3 bg-gray-100 text-gray-700 rounded-xl font-medium hover:bg-gray-200 transition-all">
+                                跳过
+                            </button>
+                            <button onclick="showReinforceResult()" class="px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl font-medium hover:opacity-90 transition-all">
+                                提交答案
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 强化结果弹窗 -->
+                <div id="reinforce-result-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+                    <div class="bg-white rounded-2xl p-6 w-full max-w-md shadow-2xl text-center">
+                        <div id="reinforce-correct" class="hidden">
+                            <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-check text-4xl text-green-600"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-green-600 mb-2">回答正确！</h3>
+                            <p class="text-gray-500 mb-4">继续保持，下一题</p>
+                        </div>
+                        <div id="reinforce-wrong" class="hidden">
+                            <div class="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-times text-4xl text-red-600"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-red-600 mb-2">回答错误</h3>
+                            <div class="bg-red-50 rounded-xl p-4 text-left mb-4">
+                                <p class="text-sm text-red-800"><strong>正确答案：</strong>B. b = -6</p>
+                                <p class="text-sm text-red-800 mt-2"><strong>解析：</strong>与x轴交点即y=0，代入得 0 = 3×(-2) + b，解得 b = 6...不对，应该是 b = -6。</p>
+                            </div>
+                        </div>
+                        <button onclick="closeReinforceResult(); showPage('reinforce');" class="px-6 py-3 bg-primary text-white rounded-xl font-medium hover:bg-primary/90 transition-all">
+                            继续练习
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 强化完成弹窗 -->
+                <div id="reinforce-complete-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+                    <div class="bg-white rounded-2xl p-8 w-full max-w-md shadow-2xl text-center">
+                        <div class="w-24 h-24 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fas fa-trophy text-5xl text-white"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-dark mb-2">二次强化完成！</h3>
+                        <p class="text-gray-500 mb-6">针对薄弱点的强化练习已完成</p>
+                        
+                        <div class="grid grid-cols-2 gap-4 mb-6">
+                            <div class="bg-blue-50 rounded-xl p-4">
+                                <p class="text-2xl font-bold text-blue-600">2/3</p>
+                                <p class="text-sm text-gray-600">正确数</p>
+                            </div>
+                            <div class="bg-orange-50 rounded-xl p-4">
+                                <p class="text-2xl font-bold text-orange-600">67%</p>
+                                <p class="text-sm text-gray-600">正确率</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-primary/5 rounded-xl p-4 mb-6">
+                            <p class="text-gray-600 text-sm">相比上次练习正确率提升了 <span class="text-primary font-bold">+17%</span></p>
+                        </div>
+                        
+                        <div class="flex gap-3">
+                            <button onclick="closeReinforceComplete(); showPage('practice');" class="flex-1 px-4 py-3 bg-gray-100 text-gray-700 rounded-xl font-medium hover:bg-gray-200 transition-all">
+                                返回练习中心
+                            </button>
+                            <button onclick="closeReinforceComplete(); showPage('notes');" class="flex-1 px-4 py-3 bg-primary text-white rounded-xl font-medium hover:bg-primary/90 transition-all">
+                                查看相关笔记
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 笔记列表 -->
+                <div id="page-notes" class="page-content hidden">
+                    <div class="flex items-center justify-between mb-8">
+                        <div>
+                            <h2 class="text-2xl font-bold text-dark mb-2">我的笔记</h2>
+                            <p class="text-gray-500">已生成 <span class="text-primary font-medium">12</span> 篇笔记</p>
+                        </div>
+                        <button onclick="showPage('note-generate')" class="bg-primary text-white px-6 py-3 rounded-xl font-medium hover:bg-primary/90 transition-all">
+                            <i class="fas fa-plus mr-2"></i>生成新笔记
+                        </button>
+                    </div>
+                    
+                    <div class="grid grid-cols-3 gap-6">
+                        <div class="bg-white rounded-2xl border border-gray-100 p-6 card-hover transition-all cursor-pointer" onclick="showPage('note-detail')">
+                            <div class="w-full h-40 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-xl flex items-center justify-center mb-4">
+                                <i class="fas fa-function text-5xl text-indigo-400"></i>
+                            </div>
+                            <h3 class="font-bold text-dark mb-2">一次函数完整笔记</h3>
+                            <p class="text-sm text-gray-500 mb-4">包含图像分析、性质总结、典型例题</p>
+                            <div class="flex items-center justify-between text-sm">
+                                <span class="text-gray-400"><i class="fas fa-clock mr-1"></i> 今天</span>
+                                <span class="text-primary">已复习 2 次</span>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-2xl border border-gray-100 p-6 card-hover transition-all cursor-pointer" onclick="showPage('note-detail')">
+                            <div class="w-full h-40 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-xl flex items-center justify-center mb-4">
+                                <i class="fas fa-triangle text-5xl text-emerald-400"></i>
+                            </div>
+                            <h3 class="font-bold text-dark mb-2">全等三角形判定</h3>
+                            <p class="text-sm text-gray-500 mb-4">SSS、SAS、ASA、AAS判定方法</p>
+                            <div class="flex items-center justify-between text-sm">
+                                <span class="text-gray-400"><i class="fas fa-clock mr-1"></i> 昨天</span>
+                                <span class="text-primary">已复习 5 次</span>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-2xl border border-gray-100 p-6 card-hover transition-all cursor-pointer" onclick="showPage('note-detail')">
+                            <div class="w-full h-40 bg-gradient-to-br from-amber-100 to-orange-100 rounded-xl flex items-center justify-center mb-4">
+                                <i class="fas fa-square-root-alt text-5xl text-amber-400"></i>
+                            </div>
+                            <h3 class="font-bold text-dark mb-2">因式分解方法汇总</h3>
+                            <p class="text-sm text-gray-500 mb-4">提取公因式法、公式法、分组分解</p>
+                            <div class="flex items-center justify-between text-sm">
+                                <span class="text-gray-400"><i class="fas fa-clock mr-1"></i> 3天前</span>
+                                <span class="text-primary">已复习 1 次</span>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-2xl border border-gray-100 p-6 card-hover transition-all cursor-pointer" onclick="showPage('note-detail')">
+                            <div class="w-full h-40 bg-gradient-to-br from-pink-100 to-rose-100 rounded-xl flex items-center justify-center mb-4">
+                                <i class="fas fa-square text-5xl text-pink-400"></i>
+                            </div>
+                            <h3 class="font-bold text-dark mb-2">一元二次方程</h3>
+                            <p class="text-sm text-gray-500 mb-4">求根公式、配方法、判别式</p>
+                            <div class="flex items-center justify-between text-sm">
+                                <span class="text-gray-400"><i class="fas fa-clock mr-1"></i> 上周</span>
+                                <span class="text-primary">已复习 3 次</span>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-2xl border border-gray-100 p-6 card-hover transition-all cursor-pointer" onclick="showPage('note-detail')">
+                            <div class="w-full h-40 bg-gradient-to-br from-cyan-100 to-blue-100 rounded-xl flex items-center justify-center mb-4">
+                                <i class="fas fa-chart-line text-5xl text-cyan-400"></i>
+                            </div>
+                            <h3 class="font-bold text-dark mb-2">数据分析基础</h3>
+                            <p class="text-sm text-gray-500 mb-4">平均数、中位数、众数、方差</p>
+                            <div class="flex items-center justify-between text-sm">
+                                <span class="text-gray-400"><i class="fas fa-clock mr-1"></i> 上周</span>
+                                <span class="text-primary">已复习 2 次</span>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-2xl border border-gray-100 p-6 card-hover transition-all cursor-pointer" onclick="showPage('note-detail')">
+                            <div class="w-full h-40 bg-gradient-to-br from-violet-100 to-purple-100 rounded-xl flex items-center justify-center mb-4">
+                                <i class="fas fa-shapes text-5xl text-violet-400"></i>
+                            </div>
+                            <h3 class="font-bold text-dark mb-2">特殊四边形</h3>
+                            <p class="text-sm text-gray-500 mb-4">平行四边形、矩形、菱形、正方形</p>
+                            <div class="flex items-center justify-between text-sm">
+                                <span class="text-gray-400"><i class="fas fa-clock mr-1"></i> 2周前</span>
+                                <span class="text-primary">已复习 4 次</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 笔记详情 -->
+                <div id="page-note-detail" class="page-content hidden">
+                    <div class="max-w-4xl mx-auto">
+                        <div class="flex items-center gap-4 mb-6">
+                            <button onclick="showPage('notes')" class="p-2 hover:bg-gray-100 rounded-lg transition-all">
+                                <i class="fas fa-arrow-left text-gray-600"></i>
+                            </button>
+                            <div class="flex-1">
+                                <h2 class="text-2xl font-bold text-dark">一次函数完整笔记</h2>
+                                <p class="text-gray-500">数学 · 初二 · 生成于 2024年1月15日</p>
+                            </div>
+                            <button class="p-3 hover:bg-gray-100 rounded-lg transition-all">
+                                <i class="fas fa-share-alt text-gray-600"></i>
+                            </button>
+                            <button class="p-3 hover:bg-gray-100 rounded-lg transition-all">
+                                <i class="fas fa-download text-gray-600"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="bg-white rounded-2xl border border-gray-100 p-8">
+                            <!-- 笔记内容 -->
+                            <div class="prose max-w-none">
+                                <div class="bg-indigo-50 rounded-xl p-6 mb-6">
+                                    <h3 class="text-lg font-bold text-indigo-800 mb-2"><i class="fas fa-star mr-2"></i>本节重点</h3>
+                                    <ul class="text-indigo-700 space-y-1">
+                                        <li>一次函数的定义与一般形式 y = kx + b</li>
+                                        <li>k 和 b 的几何意义</li>
+                                        <li>一次函数的图像与性质</li>
+                                    </ul>
+                                </div>
+                                
+                                <h3 class="text-xl font-bold text-dark mb-4">一、一次函数的定义</h3>
+                                <p class="text-gray-600 mb-4">形如 <span class="bg-yellow-100 px-2 py-1 rounded font-mono">y = kx + b</span>（k、b 为常数，k ≠ 0）的函数叫做一次函数。</p>
+                                
+                                <div class="bg-green-50 rounded-xl p-4 mb-6">
+                                    <p class="text-green-800"><strong>特例：</strong>当 b = 0 时，y = kx 叫做正比例函数，是一次函数的特殊形式。</p>
+                                </div>
+                                
+                                <h3 class="text-xl font-bold text-dark mb-4">二、k 和 b 的意义</h3>
+                                <div class="grid grid-cols-2 gap-4 mb-6">
+                                    <div class="bg-blue-50 rounded-xl p-4">
+                                        <h4 class="font-bold text-blue-800 mb-2">k 的意义</h4>
+                                        <p class="text-blue-700">k > 0 时，图像经过一、三象限</p>
+                                        <p class="text-blue-700">k < 0 时，图像经过二、四象限</p>
+                                        <p class="text-blue-700">|k| 越大，直线越陡</p>
+                                    </div>
+                                    <div class="bg-purple-50 rounded-xl p-4">
+                                        <h4 class="font-bold text-purple-800 mb-2">b 的意义</h4>
+                                        <p class="text-purple-700">b > 0 时，图像与 y 轴交于正半轴</p>
+                                        <p class="text-purple-700">b < 0 时，图像与 y 轴交于负半轴</p>
+                                        <p class="text-purple-700">|b| 越大，截距越大</p>
+                                    </div>
+                                </div>
+                                
+                                <h3 class="text-xl font-bold text-dark mb-4">三、常见考题类型</h3>
+                                <div class="border border-gray-200 rounded-xl p-4 mb-4">
+                                    <p class="font-medium text-dark mb-2">📝 类型一：求函数解析式</p>
+                                    <p class="text-gray-600">已知一点和斜率，或已知两点坐标，代入求 k、b</p>
+                                </div>
+                                <div class="border border-gray-200 rounded-xl p-4 mb-4">
+                                    <p class="font-medium text-dark mb-2">📝 类型二：判断图像位置</p>
+                                    <p class="text-gray-600">根据 k、b 的正负判断图像经过的象限</p>
+                                </div>
+                                <div class="border border-gray-200 rounded-xl p-4">
+                                    <p class="font-medium text-dark mb-2">📝 类型三：与坐标轴交点</p>
+                                    <p class="text-gray-600">与 x 轴交点 (-b/k, 0)，与 y 轴交点 (0, b)</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 复习建议 -->
+                        <div class="bg-white rounded-2xl border border-gray-100 p-6 mt-6">
+                            <h3 class="font-bold text-dark mb-4"><i class="fas fa-lightbulb text-yellow-500 mr-2"></i>AI复习建议</h3>
+                            <p class="text-gray-600">根据你的学习数据，建议在 <span class="text-primary font-medium">1月18日</span> 再次复习本节内容，以巩固记忆。</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 生成笔记页 -->
+                <div id="page-note-generate" class="page-content hidden">
+                    <div class="max-w-3xl mx-auto">
+                        <div class="mb-8">
+                            <h2 class="text-2xl font-bold text-dark mb-2">AI生成笔记</h2>
+                            <p class="text-gray-500">选择知识点，AI将为你生成个性化的复习笔记</p>
+                        </div>
+                        
+                        <div class="bg-white rounded-2xl border border-gray-100 p-8 mb-6">
+                            <h3 class="font-bold text-dark mb-4">选择知识点</h3>
+                            <div class="grid grid-cols-3 gap-3 mb-6">
+                                <label class="flex items-center gap-3 p-4 border-2 border-primary bg-primary/5 rounded-xl cursor-pointer">
+                                    <input type="checkbox" checked class="w-5 h-5 text-primary">
+                                    <span class="text-dark">一次函数</span>
+                                </label>
+                                <label class="flex items-center gap-3 p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-primary/50">
+                                    <input type="checkbox" class="w-5 h-5 text-primary">
+                                    <span class="text-dark">全等三角形</span>
+                                </label>
+                                <label class="flex items-center gap-3 p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-primary/50">
+                                    <input type="checkbox" class="w-5 h-5 text-primary">
+                                    <span class="text-dark">因式分解</span>
+                                </label>
+                                <label class="flex items-center gap-3 p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-primary/50">
+                                    <input type="checkbox" class="w-5 h-5 text-primary">
+                                    <span class="text-dark">一元二次方程</span>
+                                </label>
+                                <label class="flex items-center gap-3 p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-primary/50">
+                                    <input type="checkbox" class="w-5 h-5 text-primary">
+                                    <span class="text-dark">数据分析</span>
+                                </label>
+                                <label class="flex items-center gap-3 p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-primary/50">
+                                    <input type="checkbox" class="w-5 h-5 text-primary">
+                                    <span class="text-dark">特殊四边形</span>
+                                </label>
+                            </div>
+                            
+                            <h3 class="font-bold text-dark mb-4">笔记风格</h3>
+                            <div class="grid grid-cols-3 gap-3 mb-6">
+                                <label class="flex items-center gap-3 p-4 border-2 border-primary bg-primary/5 rounded-xl cursor-pointer">
+                                    <input type="radio" name="style" checked class="w-5 h-5 text-primary">
+                                    <div>
+                                        <span class="text-dark block">详细版</span>
+                                        <span class="text-xs text-gray-400">包含完整知识点和例题</span>
+                                    </div>
+                                </label>
+                                <label class="flex items-center gap-3 p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-primary/50">
+                                    <input type="radio" name="style" class="w-5 h-5 text-primary">
+                                    <div>
+                                        <span class="text-dark block">精简版</span>
+                                        <span class="text-xs text-gray-400">核心公式和要点速记</span>
+                                    </div>
+                                </label>
+                                <label class="flex items-center gap-3 p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-primary/50">
+                                    <input type="radio" name="style" class="w-5 h-5 text-primary">
+                                    <div>
+                                        <span class="text-dark block">思维导图</span>
+                                        <span class="text-xs text-gray-400">可视化知识框架</span>
+                                    </div>
+                                </label>
+                            </div>
+                            
+                            <button onclick="generateNote()" class="w-full bg-gradient-to-r from-primary to-secondary text-white py-4 rounded-xl font-bold hover:opacity-90 transition-all">
+                                <i class="fas fa-magic mr-2"></i>开始生成
+                            </button>
+                        </div>
+                        
+                        <!-- 生成中状态 -->
+                        <div id="generating" class="bg-white rounded-2xl border border-gray-100 p-8 hidden">
+                            <div class="text-center">
+                                <div class="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                                    <i class="fas fa-spinner fa-spin text-4xl text-primary"></i>
+                                </div>
+                                <h3 class="text-xl font-bold text-dark mb-2">AI正在生成笔记...</h3>
+                                <p class="text-gray-500 mb-6">根据你的学习情况，生成个性化复习笔记</p>
+                                <div class="max-w-xs mx-auto">
+                                    <div class="flex items-center justify-between text-sm mb-2">
+                                        <span class="text-gray-500">正在分析知识点...</span>
+                                        <span class="text-primary">100%</span>
+                                    </div>
+                                    <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+                                        <div class="h-full bg-primary rounded-full transition-all" style="width: 100%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 个人中心 -->
+                <div id="page-profile" class="page-content hidden">
+                    <div class="max-w-4xl mx-auto">
+                        <div class="bg-white rounded-2xl border border-gray-100 p-8 mb-6">
+                            <div class="flex items-center gap-6">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face" alt="头像" class="w-24 h-24 rounded-2xl object-cover">
+                                <div class="flex-1">
+                                    <h2 class="text-2xl font-bold text-dark mb-1">张小明</h2>
+                                    <p class="text-gray-500 mb-3">初二 · 3班 · 学号 2024001</p>
+                                    <div class="flex gap-3">
+                                        <span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">数学</span>
+                                        <span class="px-3 py-1 bg-emerald-100 text-emerald-600 rounded-full text-sm">已坚持7天</span>
+                                    </div>
+                                </div>
+                                <button class="px-6 py-3 bg-gray-100 text-gray-700 rounded-xl font-medium hover:bg-gray-200 transition-all">
+                                    <i class="fas fa-edit mr-2"></i>编辑资料
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-3 gap-6 mb-6">
+                            <div class="bg-white rounded-2xl border border-gray-100 p-6 text-center">
+                                <div class="w-14 h-14 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                                    <i class="fas fa-trophy text-2xl text-yellow-600"></i>
+                                </div>
+                                <h3 class="text-2xl font-bold text-dark">12</h3>
+                                <p class="text-gray-500 text-sm">获得徽章</p>
+                            </div>
+                            <div class="bg-white rounded-2xl border border-gray-100 p-6 text-center">
+                                <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                                    <i class="fas fa-fire text-2xl text-green-600"></i>
+                                </div>
+                                <h3 class="text-2xl font-bold text-dark">7天</h3>
+                                <p class="text-gray-500 text-sm">学习连续</p>
+                            </div>
+                            <div class="bg-white rounded-2xl border border-gray-100 p-6 text-center">
+                                <div class="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                                    <i class="fas fa-clock text-2xl text-blue-600"></i>
+                                </div>
+                                <h3 class="text-2xl font-bold text-dark">42h</h3>
+                                <p class="text-gray-500 text-sm">累计学习</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-2xl border border-gray-100 p-6">
+                            <h3 class="font-bold text-dark mb-4">学习设置</h3>
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between p-4 rounded-xl hover:bg-gray-50 transition-all cursor-pointer">
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
+                                            <i class="fas fa-bell text-primary"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium text-dark">学习提醒</h4>
+                                            <p class="text-sm text-gray-400">每天 19:00 提醒学习</p>
+                                        </div>
+                                    </div>
+                                    <i class="fas fa-chevron-right text-gray-400"></i>
+                                </div>
+                                <div class="flex items-center justify-between p-4 rounded-xl hover:bg-gray-50 transition-all cursor-pointer">
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
+                                            <i class="fas fa-users text-emerald-600"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium text-dark">家长监管</h4>
+                                            <p class="text-sm text-gray-400">查看绑定状态</p>
+                                        </div>
+                                    </div>
+                                    <i class="fas fa-chevron-right text-gray-400"></i>
+                                </div>
+                                <div class="flex items-center justify-between p-4 rounded-xl hover:bg-gray-50 transition-all cursor-pointer">
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                                            <i class="fas fa-moon text-purple-600"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium text-dark">护眼模式</h4>
+                                            <p class="text-sm text-gray-400">已开启</p>
+                                        </div>
+                                    </div>
+                                    <i class="fas fa-chevron-right text-gray-400"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 学习报告 -->
+                <div id="page-report-detail" class="page-content hidden">
+                    <div class="mb-8">
+                        <h2 class="text-2xl font-bold text-dark mb-2">学习报告</h2>
+                        <p class="text-gray-500">2024年1月8日 - 2024年1月14日</p>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-6 mb-6">
+                        <div class="bg-white rounded-2xl border border-gray-100 p-6">
+                            <h3 class="font-bold text-dark mb-4">本周正确率趋势</h3>
+                            <div class="h-48 flex items-end justify-around gap-2">
+                                <div class="flex flex-col items-center">
+                                    <div class="w-8 bg-primary rounded-t" style="height: 60%"></div>
+                                    <span class="text-xs text-gray-400 mt-2">周一</span>
+                                </div>
+                                <div class="flex flex-col items-center">
+                                    <div class="w-8 bg-primary rounded-t" style="height: 65%"></div>
+                                    <span class="text-xs text-gray-400 mt-2">周二</span>
+                                </div>
+                                <div class="flex flex-col items-center">
+                                    <div class="w-8 bg-primary rounded-t" style="height: 58%"></div>
+                                    <span class="text-xs text-gray-400 mt-2">周三</span>
+                                </div>
+                                <div class="flex flex-col items-center">
+                                    <div class="w-8 bg-primary rounded-t" style="height: 72%"></div>
+                                    <span class="text-xs text-gray-400 mt-2">周四</span>
+                                </div>
+                                <div class="flex flex-col items-center">
+                                    <div class="w-8 bg-primary rounded-t" style="height: 78%"></div>
+                                    <span class="text-xs text-gray-400 mt-2">周五</span>
+                                </div>
+                                <div class="flex flex-col items-center">
+                                    <div class="w-8 bg-emerald-500 rounded-t" style="height: 85%"></div>
+                                    <span class="text-xs text-gray-400 mt-2">周六</span>
+                                </div>
+                                <div class="flex flex-col items-center">
+                                    <div class="w-8 bg-emerald-500 rounded-t" style="height: 87%"></div>
+                                    <span class="text-xs text-gray-400 mt-2">周日</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-2xl border border-gray-100 p-6">
+                            <h3 class="font-bold text-dark mb-4">知识点掌握度</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <div class="flex items-center justify-between mb-1">
+                                        <span class="text-sm text-gray-600">一次函数</span>
+                                        <span class="text-sm font-medium text-primary">45%</span>
+                                    </div>
+                                    <div class="h-3 bg-gray-100 rounded-full overflow-hidden">
+                                        <div class="h-full bg-red-500 rounded-full" style="width: 45%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex items-center justify-between mb-1">
+                                        <span class="text-sm text-gray-600">全等三角形</span>
+                                        <span class="text-sm font-medium text-primary">58%</span>
+                                    </div>
+                                    <div class="h-3 bg-gray-100 rounded-full overflow-hidden">
+                                        <div class="h-full bg-orange-500 rounded-full" style="width: 58%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex items-center justify-between mb-1">
+                                        <span class="text-sm text-gray-600">因式分解</span>
+                                        <span class="text-sm font-medium text-primary">62%</span>
+                                    </div>
+                                    <div class="h-3 bg-gray-100 rounded-full overflow-hidden">
+                                        <div class="h-full bg-yellow-500 rounded-full" style="width: 62%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex items-center justify-between mb-1">
+                                        <span class="text-sm text-gray-600">一元二次方程</span>
+                                        <span class="text-sm font-medium text-primary">78%</span>
+                                    </div>
+                                    <div class="h-3 bg-gray-100 rounded-full overflow-hidden">
+                                        <div class="h-full bg-green-500 rounded-full" style="width: 78%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-2xl border border-gray-100 p-6">
+                        <h3 class="font-bold text-dark mb-4">本周总结</h3>
+                        <div class="grid grid-cols-4 gap-4 mb-6">
+                            <div class="bg-blue-50 rounded-xl p-4 text-center">
+                                <p class="text-3xl font-bold text-blue-600">156</p>
+                                <p class="text-sm text-gray-600">完成题目</p>
+                            </div>
+                            <div class="bg-green-50 rounded-xl p-4 text-center">
+                                <p class="text-3xl font-bold text-green-600">87%</p>
+                                <p class="text-sm text-gray-600">本周正确率</p>
+                            </div>
+                            <div class="bg-purple-50 rounded-xl p-4 text-center">
+                                <p class="text-3xl font-bold text-purple-600">12h</p>
+                                <p class="text-sm text-gray-600">学习时长</p>
+                            </div>
+                            <div class="bg-orange-50 rounded-xl p-4 text-center">
+                                <p class="text-3xl font-bold text-orange-600">+12%</p>
+                                <p class="text-sm text-gray-600">提升幅度</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-primary/5 rounded-xl p-4">
+                            <h4 class="font-bold text-primary mb-2"><i class="fas fa-lightbulb mr-2"></i>AI分析</h4>
+                            <p class="text-gray-600">本周学习状态良好，正确率呈上升趋势。建议继续加强一次函数和全等三角形的练习，这两个知识点是下周考试的重点。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script>
+        function showPage(page) {
+            // 隐藏所有页面
+            document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
+            // 显示目标页面
+            const targetPage = document.getElementById('page-' + page);
+            if (targetPage) {
+                targetPage.classList.remove('hidden');
+            }
+            
+            // 更新侧边栏高亮
+            document.querySelectorAll('.sidebar-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            const activeItem = document.querySelector(`[onclick="showPage('${page}')"]`);
+            if (activeItem) {
+                activeItem.classList.add('active');
+            }
+        }
+        
+        function handleUpload(input) {
+            if (input.files && input.files[0]) {
+                document.getElementById('upload-preview').classList.remove('hidden');
+            }
+        }
+        
+        function generateNote() {
+            document.querySelector('.bg-white.rounded-2xl').classList.add('hidden');
+            document.getElementById('generating').classList.remove('hidden');
+            setTimeout(() => {
+                showPage('note-detail');
+            }, 3000);
+        }
+        
+        // 导出练习功能
+        function exportPractice() {
+            document.getElementById('export-modal').classList.remove('hidden');
+        }
+        
+        function closeExportModal() {
+            document.getElementById('export-modal').classList.add('hidden');
+            document.getElementById('export-progress').classList.add('hidden');
+        }
+        
+        function startExport() {
+            closeExportModal();
+            document.getElementById('export-progress').classList.remove('hidden');
+            const progressBar = document.getElementById('export-progress-bar');
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.random() * 20;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        closeExportModal();
+                        alert('导出成功！文件已保存到下载目录。');
+                    }, 500);
+                }
+                progressBar.style.width = progress + '%';
+            }, 200);
+        }
+        
+        // 打印功能
+        function printPractice() {
+            var html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>练习打印</title>';
+            html += '<style>body{font-family:Microsoft YaHei,sans-serif;padding:40px}';
+            html += 'h1{text-align:center;color:#333;border-bottom:2px solid #6366f1;padding-bottom:20px}';
+            html += '.header{text-align:center;color:#666;margin-bottom:30px}';
+            html += '.exercise{margin-bottom:30px}.exercise-title{font-weight:bold;font-size:16px;margin-bottom:10px}';
+            html += '.question{margin-bottom:15px;padding:15px;border:1px solid #ddd;border-radius:8px}';
+            html += '.q-num{font-weight:bold;color:#6366f1}.answer-area{height:60px;border-bottom:1px solid #333;margin-top:10px}';
+            html += '.footer{margin-top:50px;text-align:center;color:#999;font-size:12px}</style></head><body>';
+            html += '<h1>AI智学助手 - 个性化练习</h1>';
+            html += '<div class="header"><p>姓名：______ 日期：______ 班级：______</p></div>';
+            html += '<div class="exercise"><div class="exercise-title">一、一次函数专项练习</div>';
+            html += '<div class="question"><span class="q-num">1.</span> 已知一次函数 y = 2x + b 经过点 (1, 5)，求 b 的值<div class="answer-area"></div></div>';
+            html += '<div class="question"><span class="q-num">2.</span> 已知一次函数 y = kx + 3 经过点 (2, 7)，求 k 的值<div class="answer-area"></div></div>';
+            html += '<div class="question"><span class="q-num">3.</span> 判断：一次函数 y = -2x + 5 的图像经过哪几个象限？<div class="answer-area"></div></div>';
+            html += '<div class="question"><span class="q-num">4.</span> 求一次函数 y = 3x - 2 与坐标轴的交点<div class="answer-area"></div></div>';
+            html += '<div class="question"><span class="q-num">5.</span> 已知两点 A(1, 2) 和 B(3, 6)，求一次函数解析式<div class="answer-area"></div></div>';
+            html += '</div><div class="exercise"><div class="exercise-title">二、全等三角形判定</div>';
+            html += '<div class="question"><span class="q-num">6.</span> 判断：两边及其夹角相等则三角形全等<div class="answer-area"></div></div>';
+            html += '<div class="question"><span class="q-num">7.</span> 已知三角形ABC全等于三角形DEF，AB=5,BC=7,AC=6，求周长<div class="answer-area"></div></div>';
+            html += '<div class="question"><span class="q-num">8.</span> 说明SSS判定定理<div class="answer-area"></div></div>';
+            html += '</div><div class="footer"><p>AI智学助手 - 由系统根据薄弱点自动生成</p></div></body></html>';
+            
+            var printWindow = window.open('', '_blank');
+            printWindow.document.write(html);
+            printWindow.document.close();
+            printWindow.focus();
+            setTimeout(function() { printWindow.print(); }, 500);
+        }
+        
+        // 单个练习打印功能
+        function printSinglePractice(practiceName) {
+            var practiceData = {
+                '一次函数专项': { title: '一次函数专项练习', questions: [
+                    '已知一次函数 y = 2x + b 经过点 (1, 5)，求 b 的值',
+                    '已知一次函数 y = kx + 3 经过点 (2, 7)，求 k 的值',
+                    '判断：一次函数 y = -2x + 5 的图像经过哪几个象限？',
+                    '求一次函数 y = 3x - 2 与坐标轴的交点',
+                    '已知两点 A(1, 2) 和 B(3, 6)，求一次函数解析式'
+                ]},
+                '全等三角形判定': { title: '全等三角形判定练习', questions: [
+                    '判断：两边及其夹角相等则三角形全等',
+                    '已知三角形ABC全等于三角形DEF，AB=5,BC=7,AC=6，求周长',
+                    '说明SSS判定定理',
+                    '已知AB=DE, AC=DF, 角A=角D，判断两三角形是否全等',
+                    '说明SAS判定定理的应用条件'
+                ]},
+                '因式分解进阶': { title: '因式分解进阶练习', questions: [
+                    '将 x^2 - 9 分解因式',
+                    '将 2x^2 + 4x 分解因式',
+                    '将 x^2 + 5x + 6 分解因式',
+                    '将 x^2 - 4x + 4 分解因式',
+                    '将 3x^2 - 12 分解因式'
+                ]},
+                '第四章综合测试': { title: '第四章综合测试', questions: [
+                    '已知一次函数 y = 2x + b 经过点 (1, 5)，求 b 的值',
+                    '判断：两边及其夹角相等则三角形全等',
+                    '将 x^2 - 9 分解因式',
+                    '求一次函数 y = 3x - 2 与坐标轴的交点',
+                    '说明SSS判定定理',
+                    '将 2x^2 + 4x 分解因式',
+                    '已知两点 A(1, 2) 和 B(3, 6)，求一次函数解析式',
+                    '将 x^2 + 5x + 6 分解因式'
+                ]}
+            };
+            
+            var data = practiceData[practiceName] || practiceData['一次函数专项'];
+            var html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>' + data.title + '</title>';
+            html += '<style>body{font-family:Microsoft YaHei,sans-serif;padding:40px}';
+            html += 'h1{text-align:center;color:#333;border-bottom:2px solid #6366f1;padding-bottom:20px}';
+            html += '.header{text-align:center;color:#666;margin-bottom:30px}';
+            html += '.question{margin-bottom:20px;padding:15px;border:1px solid #ddd;border-radius:8px}';
+            html += '.q-num{font-weight:bold;color:#6366f1}.answer-area{height:60px;border-bottom:1px solid #333;margin-top:10px}';
+            html += '.footer{margin-top:50px;text-align:center;color:#999;font-size:12px}</style></head><body>';
+            html += '<h1>AI智学助手 - ' + data.title + '</h1>';
+            html += '<div class="header"><p>姓名：______ 日期：______ 班级：______</p></div>';
+            
+            for (var i = 0; i < data.questions.length; i++) {
+                html += '<div class="question"><span class="q-num">' + (i + 1) + '.</span> ' + data.questions[i] + '<div class="answer-area"></div></div>';
+            }
+            
+            html += '<div class="footer"><p>AI智学助手 - ' + practiceName + '</p></div></body></html>';
+            
+            var printWindow = window.open('', '_blank');
+            printWindow.document.write(html);
+            printWindow.document.close();
+            printWindow.focus();
+            setTimeout(function() { printWindow.print(); }, 500);
+        }
+        
+        // 单个练习导出功能
+        function exportSinglePractice(practiceName) {
+            alert('已选择导出：' + practiceName + '\n导出功能将在实际开发时实现。');
+        }
+        
+        // 打开批阅弹窗
+        function openGradeModal() {
+            document.getElementById('grade-modal').classList.remove('hidden');
+            resetGradeUpload();
+        }
+        
+        // 关闭批阅弹窗
+        function closeGradeModal() {
+            document.getElementById('grade-modal').classList.add('hidden');
+            resetGradeUpload();
+        }
+        
+        // 重置上传区域
+        function resetGradeUpload() {
+            document.getElementById('grade-upload-placeholder').classList.remove('hidden');
+            document.getElementById('grade-upload-preview').classList.add('hidden');
+            document.getElementById('grade-file-input').value = '';
+        }
+        
+        // 处理上传
+        function handleGradeUpload(input) {
+            if (input.files && input.files[0]) {
+                var file = input.files[0];
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('grade-preview-img').src = e.target.result;
+                    document.getElementById('grade-file-name').textContent = file.name;
+                    document.getElementById('grade-upload-placeholder').classList.add('hidden');
+                    document.getElementById('grade-upload-preview').classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+        
+        // 开始批阅
+        function startGrading() {
+            var fileInput = document.getElementById('grade-file-input');
+            if (!fileInput.files || !fileInput.files[0]) {
+                alert('请先上传答题照片');
+                return;
+            }
+            
+            closeGradeModal();
+            
+            // 模拟批阅过程
+            setTimeout(function() {
+                document.getElementById('grade-result-modal').classList.remove('hidden');
+            }, 2000);
+        }
+        
+        // 关闭批阅结果
+        function closeGradeResult() {
+            document.getElementById('grade-result-modal').classList.add('hidden');
+        }
+        
+        // 针对特定练习打开批阅
+        function openGradeForPractice(practiceName) {
+            document.getElementById('grade-select').value = getPracticeValue(practiceName);
+            document.getElementById('grade-modal').classList.remove('hidden');
+            resetGradeUpload();
+        }
+        
+        // 根据练习名称获取select值
+        function getPracticeValue(practiceName) {
+            var map = {
+                '一次函数专项': 'function',
+                '全等三角形判定': 'triangle',
+                '因式分解进阶': 'factor',
+                '第四章综合测试': 'comprehensive'
+            };
+            return map[practiceName] || 'function';
+        }
+        
+        // 保存批阅结果
+        function saveGradeResult() {
+            alert('批阅记录已保存！');
+        }
+        
+        // 开始二次强化练习
+        function startReinforce() {
+            showPage('reinforce');
+        }
+        
+        // 显示强化结果弹窗
+        function showReinforceResult() {
+            var isCorrect = Math.random() > 0.5; // 模拟随机结果
+            if (isCorrect) {
+                document.getElementById('reinforce-correct').classList.remove('hidden');
+                document.getElementById('reinforce-wrong').classList.add('hidden');
+            } else {
+                document.getElementById('reinforce-correct').classList.add('hidden');
+                document.getElementById('reinforce-wrong').classList.remove('hidden');
+            }
+            document.getElementById('reinforce-result-modal').classList.remove('hidden');
+        }
+        
+        // 关闭强化结果弹窗
+        function closeReinforceResult() {
+            document.getElementById('reinforce-result-modal').classList.add('hidden');
+        }
+        
+        // 关闭强化完成弹窗
+        function closeReinforceComplete() {
+            document.getElementById('reinforce-complete-modal').classList.add('hidden');
+        }
+        
+        // 显示批阅详情
+        function showGradeDetail(id) {
+            alert('查看批阅详情：' + id);
+        }
+        
+        // 打开批阅详情弹窗
+        function openGradeDetailModal(id) {
+            document.getElementById('grade-detail-modal').classList.remove('hidden');
+        }
+        
+        // 关闭批阅详情弹窗
+        function closeGradeDetailModal() {
+            document.getElementById('grade-detail-modal').classList.add('hidden');
+        }
+        
+        // 从历史记录开始强化练习
+        function startReinforceFromHistory(practiceName) {
+            showPage('reinforce');
+        }
+    </script>
+</body>
+</html>

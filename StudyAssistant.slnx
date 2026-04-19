@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="studyassistant.client/studyassistant.client.esproj">
+    <Build />
+    <Deploy />
+  </Project>
+  <Project Path="StudyAssistant.Server/StudyAssistant.Server.csproj" />
+</Solution>

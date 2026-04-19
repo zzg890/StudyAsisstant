@@ -1,0 +1,13 @@
+﻿<header>
+    <h1>{{ title() }}</h1>
+    <nav>
+        <a routerLink="/">首页</a>
+        <a routerLink="/login">登录</a>
+        <a routerLink="/admin/users">用户管理</a>
+        <a routerLink="/admin/ai-models">AI模型配置</a>
+    </nav>
+</header>
+
+<main>
+    <router-outlet></router-outlet>
+</main>
