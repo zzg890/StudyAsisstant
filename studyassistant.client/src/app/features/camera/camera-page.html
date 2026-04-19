@@ -1,0 +1,14 @@
+<h2>拍照分析</h2>
+<form (ngSubmit)="upload()">
+  <input type="file" (change)="onFileChange($event)" accept="image/*,.pdf" />
+  <button type="submit" [disabled]="uploading || !selectedFile">上传</button>
+</form>
+@if (uploading) {
+  <div>正在上传...</div>
+}
+@if (uploadSuccess) {
+  <div>上传成功，正在跳转...</div>
+}
+@if (uploadError) {
+  <div style="color:red">{{ uploadError }}</div>
+}

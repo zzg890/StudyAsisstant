@@ -8,6 +8,14 @@ const routes: Routes = [
     loadComponent: () => import('./features/home/home-page.component').then((m) => m.HomePageComponent)
   },
   {
+    path: 'camera',
+    loadComponent: () => import('./features/camera/camera-page').then(m => m.CameraPage)
+  },
+  {
+    path: 'report/:taskId',
+    loadComponent: () => import('./features/report/report-page').then(m => m.ReportPage)
+  },
+  {
     path: 'login',
     loadComponent: () => import('./features/auth/login-page.component').then((m) => m.LoginPageComponent)
   },
