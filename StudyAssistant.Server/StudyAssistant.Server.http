@@ -1,6 +1,46 @@
 @StudyAssistant.Server_HostAddress = http://localhost:5032
+@token = replace_after_login
+@taskId = replace_after_upload
 
 GET {{StudyAssistant.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
+
+POST {{StudyAssistant.Server_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+	"userName": "student1",
+	"password": "abc@123"
+}
+
+###
+
+POST {{StudyAssistant.Server_HostAddress}}/api/homework-analyses/uploads
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data; boundary=StudyAssistantBoundary
+
+--StudyAssistantBoundary
+Content-Disposition: form-data; name="subject"
+
+数学
+--StudyAssistantBoundary
+Content-Disposition: form-data; name="grade"
+
+初二
+--StudyAssistantBoundary
+Content-Disposition: form-data; name="file"; filename="homework.txt"
+Content-Type: text/plain
+
+1. 一次函数练习题
+2. 全等三角形练习题
+--StudyAssistantBoundary--
+
+###
+
+GET {{StudyAssistant.Server_HostAddress}}/api/homework-analyses/{{taskId}}
+Authorization: Bearer {{token}}
 Accept: application/json
 
 ###
