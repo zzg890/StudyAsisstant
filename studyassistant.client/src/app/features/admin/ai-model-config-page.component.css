@@ -1,0 +1,83 @@
+.ai-model-config-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+h2 {
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 2.5%;
+  background: #f8fafc;
+  border-radius: 0.8rem;
+  padding: 1.2rem 1rem;
+  max-width: 900px;
+}
+
+form label {
+  flex: 1 1 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.98rem;
+}
+
+input[type="text"],
+input[type="number"] {
+  border: 1px solid #cbd5e1;
+  border-radius: 0.65rem;
+  padding: 0.45rem 0.6rem;
+}
+
+button[type="submit"] {
+  border: 1px solid #2563eb;
+  background: #2563eb;
+  color: #fff;
+  border-radius: 0.65rem;
+  padding: 0.45rem 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.model-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.2rem;
+}
+
+.model-table th,
+.model-table td {
+  border: 1px solid #e2e8f0;
+  padding: 0.5rem 0.7rem;
+  text-align: left;
+}
+
+.model-table th {
+  background: #f1f5f9;
+}
+
+.status-active {
+  color: #16a34a;
+  font-weight: 600;
+}
+
+.status-inactive {
+  color: #b91c1c;
+  font-weight: 600;
+}
+
+.action-btn {
+  border: 1px solid #64748b;
+  background: #fff;
+  color: #334155;
+  border-radius: 0.5rem;
+  padding: 0.25rem 0.7rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+  margin-right: 0.5rem;
+}
